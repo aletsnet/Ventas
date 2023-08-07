@@ -13,18 +13,18 @@ return new class extends Migration
     {
         Schema::create('ventas', function (Blueprint $table) {
             //create
-            $table->increments('id');
+            $table->id();
             $table->string('detalle')->nullable();
             $table->dateTime('apertura')->nullable();
             $table->dateTime('cierre')->nullable();
             $table->decimal('total')->nullable();
             $table->decimal('descuento')->nullable();
-            $table->integer('user')->unsigned();
-            $table->integer('sesion')->unsigned();
-            $table->integer('modo_pago')->unsigned();
-            $table->integer('status')->unsigned();
             $table->timestamps();
             $table->softDeletes();
+            $table->foreignId('user');
+            $table->foreignId('sesion');
+            $table->foreignId('modo_pago');
+            $table->foreignId('status');
 
             $table->index('detalle');
             

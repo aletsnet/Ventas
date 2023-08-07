@@ -13,20 +13,21 @@ return new class extends Migration
     {
         Schema::create('sesiones_venta', function (Blueprint $table) {
             //
-            $table->increments('id');
+            $table->id();
             $table->dateTime('apertura');
             $table->dateTime('cierre')->nullable();
             $table->decimal('inicio')->nullable();
             $table->decimal('entradas')->nullable();
             $table->decimal('salidas')->nullable();
             $table->decimal('total')->nullable();
-            $table->integer('user')->unsigned();
-            $table->integer('status')->unsigned();
+            $table->foreignId('user');
+            $table->foreignId('status');
             $table->timestamps();
             $table->softDeletes();
             
             $table->foreign('user')->references('id')->on('users');
             $table->foreign('status')->references('id')->on('catalogos_detalles');
+
         });
     }
 

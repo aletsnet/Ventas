@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('catalogos', function (Blueprint $table) {
             //crear
-            $table->increments('id');
+            $table->id();
             $table->string('nombre');
             $table->string('icon')->nullable();
             $table->string('css')->nullable();

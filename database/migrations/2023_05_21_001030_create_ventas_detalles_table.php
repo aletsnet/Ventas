@@ -13,18 +13,18 @@ return new class extends Migration
     {
         Schema::create('ventas_detalles', function (Blueprint $table) {
             //create
-            $table->increments('id');
+            $table->id();
             $table->string('detalle'); //descripcion del producto
             $table->decimal('original');
             $table->decimal('monto');
             $table->decimal('descuento');
             $table->decimal('cantidad');
             $table->decimal('total');
-            $table->integer('user')->unsigned();
-            $table->integer('venta')->unsigned();
-            $table->integer('status')->unsigned();
             $table->timestamps();
             $table->softDeletes();
+            $table->foreignId('user');
+            $table->foreignId('venta');
+            $table->foreignId('status');
 
             $table->index('detalle');
             

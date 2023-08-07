@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('ventas_catalogos', function (Blueprint $table) {
+        Schema::create('ventas_catalogos', function (Blueprint $table) {
             //create
-            $table->increments('id');
+            $table->id();
             $table->string('codigo'); // codigo de barras
             $table->string('sku'); // sku => codigo de uso interno
             $table->string('nombre');
@@ -22,6 +22,9 @@ return new class extends Migration
             $table->decimal('publico');
             $table->timestamps();
             $table->softDeletes();
+            $table->foreignId('user');
+            $table->foreignId('venta');
+            $table->foreignId('status');
 
             $table->index('codigo');
             $table->index('sku');

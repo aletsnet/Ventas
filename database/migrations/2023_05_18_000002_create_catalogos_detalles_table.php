@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('catalogos_detalles', function (Blueprint $table) {
             //crear
-            $table->increments('id');
-            $table->integer('catalogo_id')->unsigned();
+            $table->id();
             $table->string('opcion');
             $table->string('valor');
             $table->string('icon')->nullable();
@@ -25,6 +24,7 @@ return new class extends Migration
             $table->integer('orden');
             $table->timestamps();
             $table->softDeletes();
+            $table->foreignId('catalogo_id');
             
             //index
             $table->index('opcion');
