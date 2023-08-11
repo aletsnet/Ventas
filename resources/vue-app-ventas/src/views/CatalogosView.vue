@@ -17,7 +17,17 @@ export default {
             urlApi: import.meta.env.VITE_BACK_END_URL + '/api/catalogos',
             catalogos: [],
             cargando:false,
-            accionFormulario:0
+            accionFormulario:0,
+            modeloCatalogo:{
+                id:null,
+                nombre:'',
+                icon:'',
+                css:'',
+                style:'',
+                picture:'',
+                activo:true,
+                orden:null
+            },
         }
     },
 
@@ -37,7 +47,7 @@ export default {
                 });
         },
 
-        destroyCatalogo:function(id){
+        destroyCatalogo(id){
             var confirmacion = confirm('Confirma la eliminación permanente del registro '+id);
             if(confirmacion){
                 var self = this;
@@ -53,14 +63,28 @@ export default {
             }
         },
 
-        setAccionFormulario(accionFormulario){
+        mostrarFormulario(accionFormulario,catalogo){
             this.accionFormulario = accionFormulario;
+            if(this.accionFormulario == 1){
+                this.limpiarModeloCatalogo();
+            }else if(this.accionFormulario == 2){
+                this.modeloCatalogo = Object.assign({}, catalogo);
+            }
         },
 
-        persistenciaBD(n){
-            if(n){
-                this.indexCatalogo();
-            }
+        limpiarModeloCatalogo(){
+            this.modeloCatalogo.id = null;
+            this.modeloCatalogo.nombre ='',
+            this.modeloCatalogo.icon = '',
+            this.modeloCatalogo.css = '',
+            this.modeloCatalogo.style = '',
+            this.modeloCatalogo.picture = '',
+            this.modeloCatalogo.activo = true,
+            this.modeloCatalogo.orden = null
+        },
+
+        modeloActualizado(n){
+            console.log(n);
         }
 
     }
@@ -69,7 +93,17 @@ export default {
 
 <template>
     <div class="row justify-content-center">
-        <Formulario :accion="accionFormulario" @cambio-accion="(n) => accionFormulario = n" @persistencia-bd="persistenciaBD"/>
+        <Formulario 
+            v-model:id = 'modeloCatalogo.id'
+            v-model:nombre = 'modeloCatalogo.nombre'
+            v-model:icon = 'modeloCatalogo.icon'
+            v-model:css = 'modeloCatalogo.css'
+            v-model:style = 'modeloCatalogo.style'
+            v-model:picture = 'modeloCatalogo.picture'
+            v-model:activo = 'modeloCatalogo.activo'
+            v-model:orden = 'modeloCatalogo.orden'
+            :accion = 'accionFormulario'
+        />
 
         <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 mt-4 bg-white shadow rounded">
 
@@ -103,7 +137,7 @@ export default {
                         </div>
                         <div class="col-6">
                             <div class="row justify-content-center">
-                                <button class="btn btn-success col-11" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="setAccionFormulario(1)">
+                                <button class="btn btn-success col-11" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="mostrarFormulario(1,null)">
                                     <i class="bi bi-plus-circle"></i>
                                     Agregar
                                 </button>
@@ -142,7 +176,7 @@ export default {
                                 <td>{{ catalogo.activo }}</td>
                                 <td>{{ catalogo.orden }}</td>
                                 <td class="text-center">
-                                    <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="setAccionFormulario(2)">
+                                    <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="mostrarFormulario(2,catalogo)">
                                         <i class="bi bi-arrow-repeat"></i>
                                     </button>
                                 </td>
@@ -167,7 +201,7 @@ export default {
                     </p>
                 </div>
                 <!--Paginacion-->
-                <div class="col-lg-8 col-sm-10" v-show="false">
+                <div class="col-lg-8 col-sm-10" v-if="false">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-end">
                             <li class="page-item"><a class="page-link" href="#">Previous</a></li>
@@ -177,6 +211,10 @@ export default {
                             <li class="page-item"><a class="page-link" href="#">Next</a></li>
                         </ul>
                     </nav>
+                </div>
+
+                <div class="col-lg-8 col-sm-10">
+                    {{ modeloCatalogo }}
                 </div>
             </div>
         </div>

@@ -7,7 +7,15 @@ export default {
         this.limpiarCatalogo();
     },
     props: {
-        accion: 0,
+        id:Number,
+        nombre:String,
+        icon:String,
+        css:String,
+        style:String,
+        picture:String,
+        activo:Boolean,
+        orden:Number,
+        accion:Number,
     },
     methods:{
         
@@ -25,8 +33,12 @@ export default {
             
         },
 
+        updateCatalogo:function(){
+            alert('Update');
+        },
+
         limpiarCatalogo:function(){
-            this.catalogo.nombre = '';
+            this.catalogo.nombre = 'prueba';
             this.catalogo.icon = '';
             this.catalogo.css = '';
             this.catalogo.style = '';
@@ -36,29 +48,26 @@ export default {
         },
 
         cerrarFormulario:function(){
-            this.limpiarCatalogo();
-            this.$emit('cambioAccion',0);
-            this.$emit('persistenciaBd',this.persistenciaBD);
-            this.persistenciaBD = false;
+            
+        },
+
+        enviarFormulario:function(){
+            
         }
 
     },
     
     data(){
         return {
-            catalogo:{
-                nombre:'',
-                icon:'',
-                css:'',
-                style:'',
-                picture:'',
-                activo:true,
-                orden:null
-            },
+            catalogo:{},
             persistenciaBD:false,
             procesando:false
         }
-    }
+    },
+
+    watch: {
+    
+    },
 }
 </script>
 
@@ -79,43 +88,43 @@ export default {
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="cerrarFormulario"></button>
                 </div>
-                <form @submit.prevent="storeCatalogo">
+                <form @submit.prevent="enviarFormulario">
                     <div class="modal-body">
 
                         <!--Formulario-->
 
                         <div class="mb-3">
                             <label for="txtNombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="txtNombre" v-model="catalogo.nombre">
+                            <input type="text" class="form-control" id="txtNombre" :value="nombre" @input="$emit('update:nombre', $event.target.value)">
                         </div>
 
                         <div class="mb-3">
                             <label for="txtIcon" class="form-label">Icon</label>
-                            <input type="text" class="form-control" id="txtIcon" v-model="catalogo.icon">
+                            <input type="text" class="form-control" id="txtIcon" :value="icon" @input="$emit('update:icon', $event.target.value)">
                         </div>
 
                         <div class="mb-3">
                             <label for="txtCss" class="form-label">CSS</label>
-                            <input type="text" class="form-control" id="txtCss" v-model="catalogo.css">
+                            <input type="text" class="form-control" id="txtCss" :value="css" @input="$emit('update:css', $event.target.value)">
                         </div>
 
                         <div class="mb-3">
                             <label for="txtStyle" class="form-label">Style</label>
-                            <input type="text" class="form-control" id="txtStyle" v-model="catalogo.style">
+                            <input type="text" class="form-control" id="txtStyle" :value="style" @input="$emit('update:style', $event.target.value)">
                         </div>
 
                         <div class="mb-3">
                             <label for="txtPicture" class="form-label">Picture</label>
-                            <input type="text" class="form-control" id="txtPicture" v-model="catalogo.picture">
+                            <input type="text" class="form-control" id="txtPicture" :value="picture" @input="$emit('update:picture', $event.target.value)">
                         </div>
 
                         <div class="mb-3">
                             <label for="txtOrden" class="form-label">Orden</label>
-                            <input type="text" class="form-control" id="txtOrden" v-model="catalogo.orden">
+                            <input type="text" class="form-control" id="txtOrden" :value="orden" @input="$emit('update:orden', $event.target.value)">
                         </div>
 
                         <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="fcActivo" v-model="catalogo.activo">
+                            <input type="checkbox" class="form-check-input" id="fcActivo" :checked="activo" @input="$emit('update:activo', $event.target.checked)">
                             <label class="form-check-label" for="fcActivo">Activo</label>
                         </div>
 

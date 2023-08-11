@@ -12,7 +12,7 @@ class CatalogoController extends Controller
      */
     public function index()
     {
-        return Catalogo::all();
+        return Catalogo::all('id','nombre','icon','css','style','picture','activo','orden');
     }
 
     /**
