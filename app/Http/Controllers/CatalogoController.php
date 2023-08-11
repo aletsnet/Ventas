@@ -20,7 +20,15 @@ class CatalogoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $catalogo = new Catalogo;
+        $catalogo->activo = $request->activo;
+        $catalogo->css = $request->css;
+        $catalogo->icon = $request->icon;
+        $catalogo->nombre = $request->nombre;
+        $catalogo->orden = $request->orden;
+        $catalogo->picture = $request->picture;
+        $catalogo->style = $request->style;
+        $catalogo->save();
     }
 
     /**
@@ -44,6 +52,7 @@ class CatalogoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $catalogo = Catalogo::find($id);
+        $catalogo->delete();
     }
 }

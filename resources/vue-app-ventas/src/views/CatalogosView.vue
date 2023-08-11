@@ -1,5 +1,6 @@
 <script>
 import axios from "axios";
+import Formulario from '../components/catalogos/Formulario.vue';
 
 export default {
 
@@ -7,11 +8,16 @@ export default {
         this.indexCatalogo()
     },
 
+    components:{
+        Formulario
+    },
+
     data() {
         return {
             urlApi: import.meta.env.VITE_BACK_END_URL + '/api/catalogos',
             catalogos: [],
-            cargando:true
+            cargando:false,
+            accionFormulario:0
         }
     },
 
@@ -29,6 +35,32 @@ export default {
                 .catch(function (error) {
                     console.log(error);
                 });
+        },
+
+        destroyCatalogo:function(id){
+            var confirmacion = confirm('Confirma la eliminación permanente del registro '+id);
+            if(confirmacion){
+                var self = this;
+                axios.delete(self.urlApi+'/'+id)
+                .then(function(response){
+                    self.indexCatalogo();
+                    console.log(response);
+                })
+                .catch(function(error){
+                    console.log(error);
+                    alert('Error '+id+'\n'+error.response.data.message);
+                });
+            }
+        },
+
+        setAccionFormulario(accionFormulario){
+            this.accionFormulario = accionFormulario;
+        },
+
+        persistenciaBD(n){
+            if(n){
+                this.indexCatalogo();
+            }
         }
 
     }
@@ -37,7 +69,9 @@ export default {
 
 <template>
     <div class="row justify-content-center">
-        <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 mt-5 bg-white shadow rounded">
+        <Formulario :accion="accionFormulario" @cambio-accion="(n) => accionFormulario = n" @persistencia-bd="persistenciaBD"/>
+
+        <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 mt-4 bg-white shadow rounded">
 
             <div class="row bg-primary pt-3 pb-3 rounded-top">
 
@@ -46,6 +80,7 @@ export default {
                     <h1 class="text-white fs-4">
                         <i class="bi bi-database"></i>
                         Gestión de catálogos
+                        ( {{ accionFormulario}} )
                     </h1>
                 </div>
 
@@ -68,7 +103,7 @@ export default {
                         </div>
                         <div class="col-6">
                             <div class="row justify-content-center">
-                                <button class="btn btn-success col-11" type="button">
+                                <button class="btn btn-success col-11" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="setAccionFormulario(1)">
                                     <i class="bi bi-plus-circle"></i>
                                     Agregar
                                 </button>
@@ -80,7 +115,7 @@ export default {
 
             <!--Tabla de datos-->
             <div class="row">
-                <div class="col-12 pt-2 pb-2 rounden-bottom">
+                <div class="col-12 pt-3 pb-2 rounden-bottom">
                     <table class="table table-hover table-bordered">
                         <thead class="table-dark">
                             <tr>
@@ -107,12 +142,12 @@ export default {
                                 <td>{{ catalogo.activo }}</td>
                                 <td>{{ catalogo.orden }}</td>
                                 <td class="text-center">
-                                    <button class="btn btn-outline-warning">
+                                    <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="setAccionFormulario(2)">
                                         <i class="bi bi-arrow-repeat"></i>
                                     </button>
                                 </td>
                                 <td class="text-center">
-                                    <button class="btn btn-outline-danger">
+                                    <button class="btn btn-outline-danger" @click="destroyCatalogo(catalogo.id)">
                                         <i class="bi bi-trash-fill"></i>
                                     </button>
                                 </td>
@@ -124,7 +159,7 @@ export default {
             </div>
 
             <!--Controles de paginacion-->
-            <div class="row pt-2 pb-2">
+            <div class="row pt-1 pb-2">
                 <div class="col-lg-4 col-sm-2">
                     <p class="fw-light" v-if="catalogos.length >= 1">
                         Mostrando <span class="fw-semibold">{{ catalogos.length }}</span> registros recuperados de la base
