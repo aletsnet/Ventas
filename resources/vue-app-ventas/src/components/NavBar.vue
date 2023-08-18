@@ -33,7 +33,8 @@
                         </ul>
                     </li>
                 </ul>
-                <span class="navbar-text ">
+                <span class="navbar-text text-primary">
+                    <i class="bi bi-person-circle"></i>
                     Kevin A. Demers
                 </span>
             </div>

@@ -1,11 +1,7 @@
 <script>
-import axios from 'axios';
 
 export default {
 
-    mounted: function () {
-        this.limpiarCatalogo();
-    },
     props: {
         id:Number,
         nombre:String,
@@ -16,43 +12,16 @@ export default {
         activo:Boolean,
         orden:Number,
         accion:Number,
+        cargando:Boolean
     },
     methods:{
-        
-        storeCatalogo:function(){
-            var self = this;
-
-            axios.post(import.meta.env.VITE_BACK_END_URL + '/api/catalogos', self.catalogo)
-            .then(function (response) {
-                self.persistenciaBD = true;
-                self.$refs.btnCerrarFormulario.click();
-            })
-            .catch(function (error) {
-                alert('Error \n'+error.response.data.message);
-            });
-            
-        },
-
-        updateCatalogo:function(){
-            alert('Update');
-        },
-
-        limpiarCatalogo:function(){
-            this.catalogo.nombre = 'prueba';
-            this.catalogo.icon = '';
-            this.catalogo.css = '';
-            this.catalogo.style = '';
-            this.catalogo.picture = '';
-            this.catalogo.activo = true;
-            this.catalogo.orden = null;
-        },
 
         cerrarFormulario:function(){
-            
+            this.$emit('close');
         },
 
-        enviarFormulario:function(){
-            
+        cerrarFormularioRef:function(){
+            this.$refs.btnCerrarFormulario.click();
         }
 
     },
@@ -83,44 +52,44 @@ export default {
                         Nuevo registro
                     </h1>
                     <h1 class="modal-title fs-5" id="staticBackdropLabel" v-show="accion == 2">
-                        <i class="bi bi-plus-circle"></i>
+                        <i class="bi bi-arrow-repeat"></i>
                         Actualizar registro
                     </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="cerrarFormulario"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="cerrarFormulario" :disabled="cargando"></button>
                 </div>
-                <form @submit.prevent="enviarFormulario">
+                <form @submit.prevent>
                     <div class="modal-body">
 
                         <!--Formulario-->
 
                         <div class="mb-3">
                             <label for="txtNombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="txtNombre" :value="nombre" @input="$emit('update:nombre', $event.target.value)">
+                            <input type="text" class="form-control" id="txtNombre" :value="nombre" @input="$emit('update:nombre', $event.target.value)" maxlength="191">
                         </div>
 
                         <div class="mb-3">
                             <label for="txtIcon" class="form-label">Icon</label>
-                            <input type="text" class="form-control" id="txtIcon" :value="icon" @input="$emit('update:icon', $event.target.value)">
+                            <input type="text" class="form-control" id="txtIcon" :value="icon" @input="$emit('update:icon', $event.target.value)" maxlength="191">
                         </div>
 
                         <div class="mb-3">
                             <label for="txtCss" class="form-label">CSS</label>
-                            <input type="text" class="form-control" id="txtCss" :value="css" @input="$emit('update:css', $event.target.value)">
+                            <input type="text" class="form-control" id="txtCss" :value="css" @input="$emit('update:css', $event.target.value)" maxlength="191">
                         </div>
 
                         <div class="mb-3">
                             <label for="txtStyle" class="form-label">Style</label>
-                            <input type="text" class="form-control" id="txtStyle" :value="style" @input="$emit('update:style', $event.target.value)">
+                            <input type="text" class="form-control" id="txtStyle" :value="style" @input="$emit('update:style', $event.target.value)" maxlength="191">
                         </div>
 
                         <div class="mb-3">
                             <label for="txtPicture" class="form-label">Picture</label>
-                            <input type="text" class="form-control" id="txtPicture" :value="picture" @input="$emit('update:picture', $event.target.value)">
+                            <input type="text" class="form-control" id="txtPicture" :value="picture" @input="$emit('update:picture', $event.target.value)" maxlength="191">
                         </div>
 
                         <div class="mb-3">
                             <label for="txtOrden" class="form-label">Orden</label>
-                            <input type="text" class="form-control" id="txtOrden" :value="orden" @input="$emit('update:orden', $event.target.value)">
+                            <input type="number" class="form-control" id="txtOrden" :value="orden" @input="$emit('update:orden', $event.target.value)" maxlength="4">
                         </div>
 
                         <div class="mb-3 form-check">
@@ -130,11 +99,13 @@ export default {
 
                     </div>
                     <div class="modal-footer bg-light">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" @click="cerrarFormulario" ref="btnCerrarFormulario">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" @click="cerrarFormulario" ref="btnCerrarFormulario" v-show="false">
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" @click="cerrarFormulario" :disabled="cargando">
                             <i class="bi bi-dash-circle-fill"></i>
                             Cancelar
                         </button>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary" :disabled="cargando">
                             <i class="bi bi-database-add"></i>
                             Guardar
                         </button>

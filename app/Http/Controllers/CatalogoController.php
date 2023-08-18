@@ -44,7 +44,15 @@ class CatalogoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $catalogo = Catalogo::find($id);
+        $catalogo->nombre = $request->nombre;
+        $catalogo->icon = $request->icon;
+        $catalogo->css = $request->css;
+        $catalogo->style = $request->style;
+        $catalogo->picture = $request->picture;
+        $catalogo->activo = $request->activo;
+        $catalogo->orden = $request->orden;
+        $catalogo->save();
     }
 
     /**

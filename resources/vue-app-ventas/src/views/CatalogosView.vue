@@ -1,6 +1,7 @@
 <script>
 import axios from "axios";
 import Formulario from '../components/catalogos/Formulario.vue';
+import Alerta from '../classes/Alerta';
 
 export default {
 
@@ -8,7 +9,7 @@ export default {
         this.indexCatalogo()
     },
 
-    components:{
+    components: {
         Formulario
     },
 
@@ -16,24 +17,27 @@ export default {
         return {
             urlApi: import.meta.env.VITE_BACK_END_URL + '/api/catalogos',
             catalogos: [],
-            cargando:false,
-            accionFormulario:0,
-            modeloCatalogo:{
-                id:null,
-                nombre:'',
-                icon:'',
-                css:'',
-                style:'',
-                picture:'',
-                activo:true,
-                orden:null
+            cargando: false,
+            requiereActualizacion: false,
+            cargandoFormulario: false,
+            accionFormulario: 0,
+            modeloCatalogo: {
+                id: null,
+                nombre: '',
+                icon: '',
+                css: '',
+                style: '',
+                picture: '',
+                activo: true,
+                orden: null
             },
         }
     },
 
     methods: {
 
-        indexCatalogo() {
+        //--------------CRUD------------------------
+        indexCatalogo: function () {
             this.catalogos = [];
             this.cargando = true;
             var self = this;
@@ -44,66 +48,117 @@ export default {
                 })
                 .catch(function (error) {
                     console.log(error);
+                    self.cargando = false;
                 });
         },
 
-        destroyCatalogo(id){
-            var confirmacion = confirm('Confirma la eliminación permanente del registro '+id);
-            if(confirmacion){
-                var self = this;
-                axios.delete(self.urlApi+'/'+id)
-                .then(function(response){
-                    self.indexCatalogo();
-                    console.log(response);
+        storeCatalogo: function () {
+            var self = this;
+            self.cargando = true;
+            axios.post(self.urlApi, self.modeloCatalogo)
+                .then(function (response) {
+                    self.cargando = false;
+                    self.requiereActualizacion = true;
+                    self.$refs.formulario.cerrarFormularioRef();
                 })
-                .catch(function(error){
-                    console.log(error);
-                    alert('Error '+id+'\n'+error.response.data.message);
+                .catch(function (error) {
+                    console.log(error)
+                    let alerta = new Alerta();
+                    alerta.mensajeError(error);
                 });
-            }
+
         },
 
-        mostrarFormulario(accionFormulario,catalogo){
+        updateCatalogo: function () {
+            var self = this;
+            self.cargando = true;
+
+            axios.put(self.urlApi + '/' + self.modeloCatalogo.id, self.modeloCatalogo)
+                .then(function (response) {
+                    self.cargando = false;
+                    self.requiereActualizacion = true;
+                    self.$refs.formulario.cerrarFormularioRef();
+                })
+                .catch(function (error) {
+                    self.cargando = false;
+                    alert('Error \n' + error.response.data.message);
+                });
+        },
+
+        destroyCatalogo: function (id) {
+            let self = this;
+            let alerta = new Alerta();
+
+
+            alerta.confirmarEliminacion('¿Deseas eliminar permanentemente este registro?')
+            .then(function(){
+                self.cargando = true;
+                axios.delete(self.urlApi + '/' + id)
+                .then(function (response) {
+                    self.indexCatalogo();
+                    self.cargando = false;
+                })
+                .catch(function (error) {
+                    alert('Error ' + id + '\n' + error.response.data.message);
+                    self.cargando = false;
+                });
+            })
+            .catch(function(){
+                
+            });
+            
+        },
+
+
+
+        //------------------------------------------------
+
+        mostrarFormulario: function (accionFormulario, catalogo) {
             this.accionFormulario = accionFormulario;
-            if(this.accionFormulario == 1){
+            if (this.accionFormulario == 1) {
                 this.limpiarModeloCatalogo();
-            }else if(this.accionFormulario == 2){
+            } else if (this.accionFormulario == 2) {
                 this.modeloCatalogo = Object.assign({}, catalogo);
             }
         },
 
-        limpiarModeloCatalogo(){
-            this.modeloCatalogo.id = null;
-            this.modeloCatalogo.nombre ='',
-            this.modeloCatalogo.icon = '',
-            this.modeloCatalogo.css = '',
-            this.modeloCatalogo.style = '',
-            this.modeloCatalogo.picture = '',
-            this.modeloCatalogo.activo = true,
-            this.modeloCatalogo.orden = null
+        cerrarFormulario: function () {
+            this.limpiarModeloCatalogo();
+            this.accionFormulario = 0;
+            if (this.requiereActualizacion) {
+                this.indexCatalogo();
+                this.requiereActualizacion = false;
+            }
         },
 
-        modeloActualizado(n){
-            console.log(n);
-        }
+        enviarFormulario: function () {
+            if (this.accionFormulario == 1) {
+                this.storeCatalogo();
+            } else if (this.accionFormulario == 2) {
+                this.updateCatalogo();
+            }
+        },
 
+        limpiarModeloCatalogo: function () {
+            this.modeloCatalogo.id = null;
+            this.modeloCatalogo.nombre = '',
+                this.modeloCatalogo.icon = '',
+                this.modeloCatalogo.css = '',
+                this.modeloCatalogo.style = '',
+                this.modeloCatalogo.picture = '',
+                this.modeloCatalogo.activo = true,
+                this.modeloCatalogo.orden = null
+        },
     }
 }
 </script>
 
 <template>
     <div class="row justify-content-center">
-        <Formulario 
-            v-model:id = 'modeloCatalogo.id'
-            v-model:nombre = 'modeloCatalogo.nombre'
-            v-model:icon = 'modeloCatalogo.icon'
-            v-model:css = 'modeloCatalogo.css'
-            v-model:style = 'modeloCatalogo.style'
-            v-model:picture = 'modeloCatalogo.picture'
-            v-model:activo = 'modeloCatalogo.activo'
-            v-model:orden = 'modeloCatalogo.orden'
-            :accion = 'accionFormulario'
-        />
+        <Formulario v-model:id='modeloCatalogo.id' v-model:nombre='modeloCatalogo.nombre' v-model:icon='modeloCatalogo.icon'
+            v-model:css='modeloCatalogo.css' v-model:style='modeloCatalogo.style' v-model:picture='modeloCatalogo.picture'
+            v-model:activo='modeloCatalogo.activo' v-model:orden='modeloCatalogo.orden' :accion='accionFormulario'
+            :cargando='cargando' @close='cerrarFormulario' @submit='enviarFormulario' ref="formulario" />
 
         <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 mt-4 bg-white shadow rounded">
 
@@ -114,7 +169,6 @@ export default {
                     <h1 class="text-white fs-4">
                         <i class="bi bi-database"></i>
                         Gestión de catálogos
-                        ( {{ accionFormulario}} )
                     </h1>
                 </div>
 
@@ -129,7 +183,8 @@ export default {
                     <div class="row">
                         <div class="col-6">
                             <div class="row justify-content-center">
-                                <button class="btn btn-light col-11" type="button" @click="indexCatalogo">
+                                <button class="btn btn-light col-11" type="button" @click="indexCatalogo"
+                                    :disabled="cargando">
                                     <i class="bi bi-arrow-repeat"></i>
                                     Actualizar
                                 </button>
@@ -137,7 +192,9 @@ export default {
                         </div>
                         <div class="col-6">
                             <div class="row justify-content-center">
-                                <button class="btn btn-success col-11" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="mostrarFormulario(1,null)">
+                                <button class="btn btn-success col-11" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#staticBackdrop" @click="mostrarFormulario(1, null)"
+                                    :disabled="cargando">
                                     <i class="bi bi-plus-circle"></i>
                                     Agregar
                                 </button>
@@ -151,7 +208,7 @@ export default {
             <div class="row">
                 <div class="col-12 pt-3 pb-2 rounden-bottom">
                     <table class="table table-hover table-bordered">
-                        <thead class="table-dark">
+                        <thead class="table-secondary">
                             <tr>
 
                                 <th scope="col">ID</th>
@@ -176,12 +233,15 @@ export default {
                                 <td>{{ catalogo.activo }}</td>
                                 <td>{{ catalogo.orden }}</td>
                                 <td class="text-center">
-                                    <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="mostrarFormulario(2,catalogo)">
+                                    <button class="btn btn-outline-warning" data-bs-toggle="modal"
+                                        data-bs-target="#staticBackdrop" @click="mostrarFormulario(2, catalogo)"
+                                        :disabled="cargando">
                                         <i class="bi bi-arrow-repeat"></i>
                                     </button>
                                 </td>
                                 <td class="text-center">
-                                    <button class="btn btn-outline-danger" @click="destroyCatalogo(catalogo.id)">
+                                    <button class="btn btn-outline-danger" @click="destroyCatalogo(catalogo.id)"
+                                        :disabled="cargando">
                                         <i class="bi bi-trash-fill"></i>
                                     </button>
                                 </td>
@@ -194,14 +254,15 @@ export default {
 
             <!--Controles de paginacion-->
             <div class="row pt-1 pb-2">
-                <div class="col-lg-4 col-sm-2">
+                <div class="col-lg-5 col-sm-2">
                     <p class="fw-light" v-if="catalogos.length >= 1">
+                        <i class="bi bi-info-circle"></i>
                         Mostrando <span class="fw-semibold">{{ catalogos.length }}</span> registros recuperados de la base
                         de datos.
                     </p>
                 </div>
                 <!--Paginacion-->
-                <div class="col-lg-8 col-sm-10" v-if="false">
+                <div class="col-lg-7 col-sm-10" v-if="false">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-end">
                             <li class="page-item"><a class="page-link" href="#">Previous</a></li>
@@ -213,9 +274,6 @@ export default {
                     </nav>
                 </div>
 
-                <div class="col-lg-8 col-sm-10">
-                    {{ modeloCatalogo }}
-                </div>
             </div>
         </div>
     </div>
