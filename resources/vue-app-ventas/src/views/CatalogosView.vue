@@ -47,8 +47,9 @@ export default {
                     self.cargando = false;
                 })
                 .catch(function (error) {
-                    console.log(error);
                     self.cargando = false;
+                    let alerta = new Alerta();
+                    alerta.error('Error al recuperar registros de la base de datos.',error);
                 });
         },
 
@@ -62,9 +63,9 @@ export default {
                     self.$refs.formulario.cerrarFormularioRef();
                 })
                 .catch(function (error) {
-                    console.log(error)
+                    self.cargando = false;
                     let alerta = new Alerta();
-                    alerta.mensajeError(error);
+                    alerta.error('Error al almacenar registro en la base de datos.',error);
                 });
 
         },
@@ -81,7 +82,8 @@ export default {
                 })
                 .catch(function (error) {
                     self.cargando = false;
-                    alert('Error \n' + error.response.data.message);
+                    let alerta = new Alerta();
+                    alerta.error('Error al actualizar registro.',error);
                 });
         },
 
@@ -99,8 +101,9 @@ export default {
                     self.cargando = false;
                 })
                 .catch(function (error) {
-                    alert('Error ' + id + '\n' + error.response.data.message);
                     self.cargando = false;
+                    let alerta = new Alerta();
+                    alerta.error('Error al eliminar.',error);
                 });
             })
             .catch(function(){

@@ -29,7 +29,7 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">Ventas</a></li>
+                            <li><router-link to="/ventas" class="dropdown-item" href="#">Ventas</router-link></li>
                         </ul>
                     </li>
                 </ul>
