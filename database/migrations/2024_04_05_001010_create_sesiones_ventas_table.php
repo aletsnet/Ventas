@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sesiones_venta', function (Blueprint $table) {
+        Schema::create('sesiones_ventas', function (Blueprint $table) {
             //
             $table->id();
             $table->dateTime('apertura');
@@ -20,12 +20,16 @@ return new class extends Migration
             $table->decimal('entradas')->nullable();
             $table->decimal('salidas')->nullable();
             $table->decimal('total')->nullable();
-            $table->foreignId('user');
-            $table->foreignId('status');
+            $table->unsignedBigInteger('user')->nullable()->index();
+            $table->integer('contrato')->unsigned();
+            $table->integer('tienda')->unsigned();
+            $table->integer('status')->unsigned();
             $table->timestamps();
             $table->softDeletes();
             
             $table->foreign('user')->references('id')->on('users');
+            $table->foreign('contrato')->references('id')->on('contratos');
+            $table->foreign('tienda')->references('id')->on('tiendas');
             $table->foreign('status')->references('id')->on('catalogos_detalles');
 
         });
@@ -36,8 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('sesiones_venta', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('sesiones_venta');
     }
 };

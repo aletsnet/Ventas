@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('catalogos', function (Blueprint $table) {
-            //crear
-            $table->id();
+        Schema::create('roles', function (Blueprint $table) {
+            //create
+            $table->increments('id');
             $table->string('nombre');
             $table->string('icon')->nullable();
             $table->string('css')->nullable();
@@ -23,11 +23,19 @@ return new class extends Migration
             $table->integer('orden');
             $table->timestamps();
             $table->softDeletes();
-
+            
+            //index
             $table->index('nombre');
+        });
 
-            //llaves foraneas
-            //$table->foreign('catalogo_id')->references('id')->on('catalogos');
+        
+        //alter table
+        Schema::table('users', function (Blueprint $table) {
+            $table->integer('rol')->unsigned()->after('password');
+            $table->unsignedBigInteger('user')->nullable()->index()->after('password');
+            
+            $table->foreign('rol')->references('id')->on('roles');
+            $table->foreign('user')->references('id')->on('users');
         });
     }
 
@@ -36,6 +44,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('catalogos');
+        Schema::dropIfExists('roles');
     }
 };

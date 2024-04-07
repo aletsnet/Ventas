@@ -14,23 +14,19 @@ return new class extends Migration
         Schema::create('ventas_detalles', function (Blueprint $table) {
             //create
             $table->id();
-            $table->string('detalle'); //descripcion del producto
+            $table->string('param'); //descripcion del producto
             $table->decimal('original');
             $table->decimal('monto');
             $table->decimal('descuento');
             $table->decimal('cantidad');
             $table->decimal('total');
+            $table->unsignedBigInteger('producto_servicio')->index();
+            $table->unsignedBigInteger('venta')->index();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreignId('user');
-            $table->foreignId('venta');
-            $table->foreignId('status');
 
-            $table->index('detalle');
-            
-            $table->foreign('user')->references('id')->on('users');
+            $table->foreign('producto_servicio')->references('id')->on('productos_servicios');
             $table->foreign('venta')->references('id')->on('ventas');
-            $table->foreign('status')->references('id')->on('catalogos_detalles');
         });
     }
 
@@ -39,8 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('ventas_detalles', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('ventas_detalles');
     }
 };

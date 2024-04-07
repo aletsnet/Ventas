@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('catalogos_detalles', function (Blueprint $table) {
+        Schema::create('catalogos', function (Blueprint $table) {
             //crear
-            $table->id();
-            $table->string('opcion');
-            $table->string('valor');
+            $table->increments('id');
+            $table->string('nombre');
             $table->string('icon')->nullable();
             $table->string('css')->nullable();
             $table->string('style')->nullable();
@@ -24,14 +23,8 @@ return new class extends Migration
             $table->integer('orden');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreignId('catalogo_id');
-            
-            //index
-            $table->index('opcion');
-            $table->index('valor');
 
-            //llave foranea
-            $table->foreign('catalogo_id')->references('id')->on('catalogos');
+            $table->index('nombre');
         });
     }
 
@@ -40,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('catalogos_detalles');
+        Schema::dropIfExists('catalogos');
     }
 };

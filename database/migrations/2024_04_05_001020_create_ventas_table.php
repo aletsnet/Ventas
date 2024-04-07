@@ -19,17 +19,23 @@ return new class extends Migration
             $table->dateTime('cierre')->nullable();
             $table->decimal('total')->nullable();
             $table->decimal('descuento')->nullable();
+            
+            $table->unsignedBigInteger('user')->nullable()->index();
+            $table->integer('contrato')->unsigned();
+            $table->integer('tienda')->unsigned();
+
+            $table->unsignedBigInteger('sesion')->nullable()->index();
+            $table->integer('modo_pago')->unsigned();
+            $table->integer('status')->unsigned();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreignId('user');
-            $table->foreignId('sesion');
-            $table->foreignId('modo_pago');
-            $table->foreignId('status');
 
             $table->index('detalle');
             
             $table->foreign('user')->references('id')->on('users');
-            $table->foreign('sesion')->references('id')->on('sesiones_venta');
+            $table->foreign('contrato')->references('id')->on('contratos');
+            $table->foreign('tienda')->references('id')->on('tiendas');
+            $table->foreign('sesion')->references('id')->on('sesiones_ventas');
             $table->foreign('modo_pago')->references('id')->on('catalogos_detalles');
             $table->foreign('status')->references('id')->on('catalogos_detalles');
         });
