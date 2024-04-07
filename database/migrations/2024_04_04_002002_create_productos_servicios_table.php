@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('foto')->nullable();
             $table->string('nombre');
             $table->text('descripcion')->nullable();
-            $table->decimal('precio'); //precio por unidad
-            $table->decimal('publico')->nullable();
+            $table->decimal('precio')->nullable(); //precio por unidad
+            $table->decimal('publico');
             $table->integer('departamento')->unsigned()->nullable();
             $table->integer('subdepartamento')->unsigned()->nullable();
             $table->unsignedBigInteger('user')->nullable()->index();

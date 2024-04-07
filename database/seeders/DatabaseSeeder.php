@@ -12,10 +12,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \DB::table('users')->insert(['name'=>'Administrador',
+        \DB::table('users')->insert(['avatar'=>'vendor/adminlte/dist/img/avatar.png',
+                                     'name'=>'Administrador',
                                      'email'=>'admin@web.com',
                                      'password'=> \Hash::make('qwaszx12'),
-                                     'rol_id' => 1
+                                     'rol' => 1
                                     ]);
     }
 }

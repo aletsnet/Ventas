@@ -17,13 +17,16 @@ return new class extends Migration
             $table->string('telefono');
             $table->unsignedBigInteger('user')->nullable()->index();
             $table->integer('status')->unsigned()->nullable();
+            $table->integer('tipo')->unsigned()->nullable();
             $table->integer('estado')->unsigned()->nullable();
             $table->integer('municipio')->unsigned()->nullable();
+            $table->text('param')->nullable();
             $table->timestamps();
             $table->softDeletes();
             
             $table->index('nombre');
             $table->foreign('status')->references('id')->on('catalogos_detalles');
+            $table->foreign('tipo')->references('id')->on('catalogos_detalles');
             $table->foreign('user')->references('id')->on('users');
             $table->foreign('estado')->references('id')->on('estados');
             $table->foreign('municipio')->references('id')->on('municipios');
