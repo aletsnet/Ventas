@@ -1,5 +1,20 @@
 <nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        @guest
+        
+                @if (Route::has('login'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                    </li>
+                @endif
+
+                @if (Route::has('register'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                    </li>
+                @endif
+            
+        @else
         @php
             $user = Auth::user();
             $list = App\Models\MenuPermisos::with(['Menu'])
@@ -49,6 +64,6 @@
         </li>
 
         @endforeach
-        
+        @endguest
     </ul>
 </nav>

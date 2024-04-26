@@ -2,11 +2,15 @@
         <li class="nav-item">
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
+        @guest
+
+        @else
         @php
             $user = Auth::user();
+            //dd($user);
             $list = App\Models\MenuPermisos::with(['Menu'])
                 ->join('menu', 'menu_permisos.menu', '=', 'menu.id')
-                ->where('roles',$user->rol)
+                ->where('roles',$user->Rol)
                 ->where('menu.padre', null)
                 ->get();
         @endphp
@@ -45,6 +49,27 @@
             
         </li>    
         @endforeach
+        @endguest
+    </ul>
+
+    <ul class="navbar-nav ml-auto">
+
+        @if (Route::has('login'))
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('login') }}">
+                    <i class="fas fa-user"></i> Acceso
+                </a>
+            </li>
+        @endif
+
+        @if (Route::has('register'))
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('register') }}">
+                    <i class="fas fa-edit"></i>
+                    Registro
+                </a>
+            </li>
+        @endif
     </ul>
     <form id="logout-form" action="{{ route('logout') }}" method="POST">
         @csrf
