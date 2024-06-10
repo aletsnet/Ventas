@@ -20,6 +20,8 @@ class ThemesSeeder extends Seeder
         \DB::table('catalogos_detalles')->insert(['id'=>8003, 'catalogo_id'=>8, 'opcion' => 'No disponible', 'valor'=>3, 'css' => 'badge bg-red', 'orden' => '3', 'activo' => 1]);
         \DB::table('catalogos_detalles')->insert(['id'=>8004, 'catalogo_id'=>8, 'opcion' => 'Exclusivo', 'valor'=>4, 'css' => 'badge bg-purple', 'orden' => '4', 'activo' => 1]);
         
+        \DB::table('menu')->insert(['id'=>5004, 'padre'=>5000, 'menu'=>'Themes', 'ruta'=>'themes.page', 'status' => 9001]);
+        \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>5005]);
 
         \DB::table('themes')->insert(
             [

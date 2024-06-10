@@ -22,6 +22,7 @@ class MenuSeeder extends Seeder
         \DB::table('menu')->insert(['id'=>2000, 'menu'=>'Productos', 'status' => 9001]);
         \DB::table('menu')->insert(['id'=>3000, 'menu'=>'Inventarios', 'status' => 9001]);
         \DB::table('menu')->insert(['id'=>4000, 'menu'=>'Cortes', 'status' => 9001]);
+        \DB::table('menu')->insert(['id'=>5000, 'menu'=>'Admin', 'status' => 9001]);
         \DB::table('menu')->insert(['id'=>9000, 'menu'=>'Sistemas', 'status' => 9001]);
 
         \DB::table('menu')->insert(['id'=>1001, 'padre'=>1000, 'menu'=>'Caja - TPV', 'ruta'=>'box.page', 'status' => 9001]);
@@ -33,9 +34,13 @@ class MenuSeeder extends Seeder
         \DB::table('menu')->insert(['id'=>3001, 'padre'=>3000, 'menu'=>'Lista', 'ruta'=>'inv.page', 'status' => 9001]);
         \DB::table('menu')->insert(['id'=>3002, 'padre'=>3000, 'menu'=>'Abastos y Mermas', 'ruta'=>'move.report', 'status' => 9001]);
 
-        \DB::table('menu')->insert(['id'=>4001, 'padre'=>3000, 'menu'=>'Hacer Corte', 'ruta'=>'corte.page', 'status' => 9001]);
-        \DB::table('menu')->insert(['id'=>4002, 'padre'=>3000, 'menu'=>'Lista', 'ruta'=>'cortes.page', 'status' => 9001]);
-        \DB::table('menu')->insert(['id'=>4003, 'padre'=>3000, 'menu'=>'Estadistica', 'ruta'=>'estadistica.page', 'status' => 9001]);
+        \DB::table('menu')->insert(['id'=>4001, 'padre'=>4000, 'menu'=>'Hacer Corte', 'ruta'=>'corte.page', 'status' => 9001]);
+        \DB::table('menu')->insert(['id'=>4002, 'padre'=>4000, 'menu'=>'Lista', 'ruta'=>'cortes.page', 'status' => 9001]);
+        \DB::table('menu')->insert(['id'=>4003, 'padre'=>4000, 'menu'=>'Estadistica', 'ruta'=>'estadistica.page', 'status' => 9001]);
+
+        \DB::table('menu')->insert(['id'=>5001, 'padre'=>5000, 'menu'=>'Contratos', 'ruta'=>'contratos.page', 'status' => 9001]);
+        \DB::table('menu')->insert(['id'=>5002, 'padre'=>5000, 'menu'=>'Tickets', 'ruta'=>'ticket.page', 'status' => 9001]);
+        \DB::table('menu')->insert(['id'=>5003, 'padre'=>5000, 'menu'=>'Usuarios', 'ruta'=>'users.page', 'status' => 9001]);
 
         \DB::table('menu')->insert(['id'=>9001, 'padre'=>9000, 'menu'=>'Contratos', 'ruta'=>'con.page', 'status' => 9001]);
         \DB::table('menu')->insert(['id'=>9002, 'padre'=>9000, 'menu'=>'Usuarios', 'ruta'=>'user.page', 'status' => 9001]);
@@ -47,6 +52,7 @@ class MenuSeeder extends Seeder
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>2000]);
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>3000]);
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>4000]);
+        \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>5000]);
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>9000]);
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>1001]);
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>1002]);
@@ -57,6 +63,9 @@ class MenuSeeder extends Seeder
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>4001]);
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>4002]);
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>4003]);
+        \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>5001]);
+        \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>5002]);
+        \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>5003]);
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>9001]);
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>9002]);
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>9003]);
