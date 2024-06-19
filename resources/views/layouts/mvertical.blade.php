@@ -43,12 +43,14 @@
             @endphp
             <ul class="nav nav-treeview">
                 @foreach ($list_sub as $item_sub)
+                @if (Route::has($item_sub->ruta))
                 <li class="nav-item">
                     <a href="{{ $item_sub->ruta ? route($item_sub->ruta) : asset($item_sub->url) }}"
                        class="nav-link" >
                        {{ $item_sub->menu }} 
                     </a>
                 </li>
+                @endif 
                 @endforeach
                 @if($item->id == 9000)
                     <li class="nav-item">

@@ -19,7 +19,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		<!-- Scripts -->
 		
 	</head>
-	<body class="hold-transition layout-top-nav">
+	<body class="" style="height: auto;">
 		<div class="wrapper">
 			<!-- Navbar -->
 			<nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -45,9 +45,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<!-- Main Sidebar Container -->
 			<aside class="main-sidebar sidebar-dark-primary elevation-4">
 				<!-- Brand Logo -->
-				<a href="index3.html" class="brand-link">
-					<img src="{{ asset('images/logo.jpg') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-					<span class="brand-text font-weight-light">Captura</span>
+				<a href="{{ route('welcome') }}" class="brand-link">
+					<img src="{{ asset('image/logo.png') }}" alt="Ventas" class="brand-image img-circle elevation-3" style="opacity: .8">
+					<span class="brand-text font-weight-light">Ventas</span>
 				</a>
 
 				@include('layouts.mvertical')

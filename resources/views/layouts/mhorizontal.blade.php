@@ -10,15 +10,17 @@
             //dd($user);
             $list = App\Models\MenuPermisos::with(['Menu'])
                 ->join('menu', 'menu_permisos.menu', '=', 'menu.id')
-                ->where('roles',$user->Rol)
-                ->where('menu.padre', null)
+                ->where('roles',$user->rol)
+                ->whereNull('menu.padre')
                 ->get();
         @endphp
         @foreach ($list as $item)
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="{{ $item->ruta ?? $item->id}}navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"">
                 @if ($item->icon)
-                    <i class="{{ $item->icon }}"></i>     
+                    <i class="{{ $item->icon }}"></i> 
+                @else
+                    <i class="far fa-circle nav-icon"></i>
                 @endif
                 <span data-key="{{ $item->id}}">{{ $item->menu }}</span>
             </a>
@@ -32,9 +34,11 @@
                 @endphp
                 <ul class="dropdown-menu" aria-labelledby="{{ $item->ruta ?? $item->id}}navbarDropdown">
                     @foreach ($list_sub as $item_sub)
+                    @if (Route::has($item_sub->ruta))
                     <li class="">
                         <a href="{{ $item_sub->ruta ? route($item_sub->ruta) : asset($item_sub->url) }}" class="dropdown-item" data-key="t-analytics"> {{ $item_sub->menu }} </a>
                     </li>
+                    @endif
                     @endforeach
                     @if ($item->id == 9000)
                         {!! 

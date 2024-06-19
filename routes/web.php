@@ -20,7 +20,7 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function()
 {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('welcome');
     
     Route::get('/p/contratos', [App\Http\Controllers\ContratosController::class, 'page'])->name('contratos.page');
     
