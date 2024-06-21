@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contratos;
+use App\Models\User;
 use App\Models\CatalogosDetalles;
 use App\Models\Estados;
 use Illuminate\Http\Request;
@@ -64,7 +65,8 @@ class ContratosController extends Controller
         $use = new User;
         $use->name = $request->name;
         $use->email = $request->email;
-        $use->password = $request->password;
+        $use->password = \Hash::make($request->password);
+        $use->rol = 2;
         $use->save();
 
         $row = new Contratos;
@@ -77,7 +79,7 @@ class ContratosController extends Controller
         $row->status = $request->estatus;
         $row->save();
         
-        //return [];
+        return $row;
     }
 
     /**
@@ -107,7 +109,39 @@ class ContratosController extends Controller
     public function update(Request $request, $id)
     {
         if(!acceso('page punteo',5001)){ return []; }
-        return [];
+        $user = \Auth::user();
+
+        $request->validate([
+            'name' => 'required|string|max:191',
+            'email' => 'required|string|email|max:191',
+            'password' => 'confirmed',
+            'telefono' => 'required|string|max:12',
+            'estado' => 'required',
+            'municipio' => 'required',
+            'tipo' => 'required',
+            'estatus' => 'required'
+        ]);
+
+        $row = Contratos::with("User")
+                    ->where('id',$id)
+                    ->first();
+        if($row instanceof Contratos){
+            $row->nombre = $request->name;
+            $row->telefono = $request->telefono;
+            $row->estado = $request->estado;
+            $row->municipio = $request->municipio;
+            $row->tipo = $request->tipo;
+            $row->status = $request->estatus;
+
+            $row->User->name = $request->name;
+            $row->User->email = $request->email;
+
+            if($request->password != "")
+                $row->User->password = \Hash::make($request->password);
+
+            $row->save();
+        }
+        return $row;
     }
 
     /**
@@ -116,7 +150,7 @@ class ContratosController extends Controller
     public function destroy($id)
     {
         if(!acceso('page punteo',5001)){ return []; }
-        $row = Contratos::with("User","Status","Tipo","Municipio","Estado")
+        $row = Contratos::with("User")
                     ->where('id',$id)
                     ->first();
         if($row instanceof Contratos){

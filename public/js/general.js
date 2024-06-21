@@ -145,12 +145,12 @@ const load_table = (tabla, cols, datos) => {
                             if(typeof item[c[0]] != "undefined"){
                                 label1 = item[c[0]];
                             }
-                            label += (label!=""?" ":"") + label1 ;
+                            label += (label!=""?", ":"") + label1 ;
                             break;
                         case 2:
                             let label2 = campos[j];
                             if(typeof item[c[0]] != "undefined"){
-                                label2 = " - ";
+                                label2 = " ";
                                 if(item[c[0]] != null){
                                     if(typeof item[c[0]][c[1]] != "undefined"){
 
@@ -158,12 +158,12 @@ const load_table = (tabla, cols, datos) => {
                                     }
                                 }
                             }
-                            label += (label!=""?" ":"") + label2 ;
+                            label += (label!=""?", ":"") + label2 ;
                             break;
                         case 3:
                             let label_valor = campos[j];
                             if(typeof item[c[0]] != "undefined"){
-                                label_valor = " - ";
+                                label_valor = " ";
                                 if(item[c[0]] != null){
                                     if(typeof item[c[0]][c[1]] != "undefined"){
                                         if(typeof item[c[0]][c[1]][c[2]] != "undefined"){
@@ -172,12 +172,12 @@ const load_table = (tabla, cols, datos) => {
                                     }
                                 }
                             }
-                            label += (label!=""?" ":"") + label_valor ;
+                            label += (label!=""?", ":"") + label_valor ;
                             break;
                         case 4:
                             let label4 = campos[j];
                             if(typeof item[c[0]] != "undefined"){
-                                label4 = " - ";
+                                label4 = " ";
                                 if(typeof item[c[0]][c[1]] != "undefined"){
                                     if(typeof item[c[0]][c[1]][c[2]] != "undefined"){
                                         if(typeof item[c[0]][c[1]][c[2]][c[3]] != "undefined"){
@@ -186,18 +186,19 @@ const load_table = (tabla, cols, datos) => {
                                     }
                                 }
                             }
-                            label += (label!=""?" ":"") + label4 ;
+                            label += (label!=""?", ":"") + label4 ;
                             break;
                         default:
-                            label += (label!=""?" ":"") + (item[c[0].trim()] ?? '-');
+                            label += (label!=""?", ":"") + (item[c[0].trim()] ?? ' ');
                             break;
                     }
                 }
 
                 //console.log(typeof label + " " + parseFloat(label));
-                let tmp = new Date(label)
+                let tmp = new Date(label);
+                let ntmp = parseFloat(label);
                 if(tmp == 'Invalid Date'){
-                    if(parseFloat(label) > 999 ){
+                    if( ntmp > 999 && ntmp < 999999999){
                         label = formattedNumber.format(label)
                     }
                 }
@@ -385,6 +386,39 @@ const load_select = (origen, destino, controll, val_default, parametros) => {
         .catch(function (error) {
             console.log(error);
             select.innerHTML = '<option> Error ...</option>';
+        });
+    
+}
+
+const load_list = (destino, controll, parametros) => {
+    const select = document.getElementById(destino);
+    select.innerHTML = "";
+
+    const first = document.createElement('option');
+    first.innerHTML = " Cargando ...";
+    select.appendChild(first);
+    
+    axios.post(controll, parametros)
+        .then(
+            function (result) {
+                list = result.data;
+
+                first.innerText = "";
+                list.map( (item) => { 
+                    const option = document.createElement('option');
+                    option.value = item[parametros.campos[0].campo];
+                    option.innerHTML = item[parametros.campos[1].campo];
+                    select.appendChild(option);
+                });
+
+                if(typeof select.attributes.onchange == 'object'){
+                    eval(select.attributes.onchange.nodeValue);
+                }
+            }
+        )
+        .catch(function (error) {
+            console.log(error);
+            first.innerHTML = 'Error, algo fallo';
         });
     
 }
