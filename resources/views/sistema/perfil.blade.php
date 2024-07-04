@@ -1,4 +1,4 @@
-@extends('layouts.adminlte')
+@extends('layouts.theme')
 
 @section('content')
 <div class="content-wrapper">

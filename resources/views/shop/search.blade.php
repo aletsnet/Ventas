@@ -7,12 +7,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Usuarios</h1>
+                    <h1 class="m-0">Tiendas</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Sistema</a></li>
-                    <li class="breadcrumb-item active">Usuarios</li>
+                    <li class="breadcrumb-item"><a href="#">Admin</a></li>
+                    <li class="breadcrumb-item active">Tiendas</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -25,7 +25,7 @@
         <div class="container-fluid">
             <div class="card card-default" id="showInventario">
                 <div class="card-header">
-                    <h3 class="card-title"> <i class="fas fa-table"></i> Lista de Usuarios</h3>
+                    <h3 class="card-title"> <i class="fas fa-table"></i> Lista de Tiendas</h3>
                 </div>
                 <div class="card-body">
                     <form id="search_form" action="javascript:void(0);">
@@ -150,32 +150,54 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <label for="name" class="form-label">Nombre:</label>
-                                    <input id="name" type="text" class="form-control" name="name" placeholder="Nombre completo" required autocomplete="name" autofocus>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <label for="email" class="form-label">Correo electronico:</label>
-                                    <input type="text" class="form-control" name="email" id="email" placeholder="Correo electronico">
+                                    <label for="nombre" class="form-label">Nombre:</label>
+                                    <input id="nombre" type="text" class="form-control" name="nombre" placeholder="Nombre de la tienda" required autocomplete="name" autofocus>
                                     <input type="hidden" id="id">
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-12">
-                                    <label for="name" class="form-label">Contraseña:</label>
-                                    <input id="password" type="password" class="form-control " name="password" placeholder="Confirmar Contraseña:" autocomplete="new-password">
+                                <div class="col-6">
+                                    <label for="telefono" class="form-label">Teléfono:</label>
+                                    <input id="telefono" type="text" class="form-control" name="telefono" placeholder="Teléfono" required autocomplete="name" autofocus>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <label for="logo" class="form-label">Logo:</label>
+                                    <input id="logo" type="file" class="form-control" name="logo" autofocus>
+                                </div>
+                                <div class="col-9">
+                                    <label for="direccion" class="form-label">Dirección:</label>
+                                    <textarea name="direccion" id="direccion" class="form-control" rows="4"></textarea>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <label for="password_confirm" class="form-label">Confirmar:</label>
-                                    <input id="password_confirm" type="password" class="form-control" name="password_confirmation" placeholder="Confirmar Contraseña:" autocomplete="new-password">
+                                    <label for="ticket_head" class="form-label">Cabecera de ticket:</label>
+                                    <textarea name="ticket_head" id="ticket_head" class="form-control" rows="4"></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="ticket_foot" class="form-label">Pie del ticket:</label>
+                                    <textarea name="ticket_foot" id="ticket_foot" class="form-control" rows="4"></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="ticket_css" class="form-label">Css del ticket:</label>
+                                    <textarea name="ticket_css" id="ticket_css" class="form-control" rows="4"></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="ticket_css" class="form-label">Css del ticket:</label>
+                                    <textarea name="ticket_css" id="ticket_css" class="form-control" rows="4"></textarea>
                                 </div>
                             </div>
                             <div class="row">
                                 @if ($contrato )
-                                <div class="col-6">
+                                <div class="col">
                                     <label for="contrato" class="form-label">Contrato:</label>
                                     <select name="contrato" id="contrato" class="form-select" placeholder="Contrato">
                                         @isset($contratos)
@@ -186,14 +208,32 @@
                                     </select>
                                 </div>
                                 @endif
-                                <div class="col-6">
-                                    <label for="rol" class="form-label">Roles:</label>
-                                    <select name="rol" id="rol" class="form-select" placeholder="Rol"  required onchange="btn_roles(this.value)" >
-                                        @isset($roles)
-                                            @foreach ($roles as $key => $item)
+                                <div class="col">
+                                    <label for="giro" class="form-label">Giro de la tienda:</label>
+                                    <select name="giro" id="giro" class="form-select" placeholder="Giros">
+                                        @isset($giros)
+                                            @foreach ($giros as $key => $item)
                                                 <option value="{{ $item->id }}"> {{ $item->nombre }} </option>
                                             @endforeach
                                         @endisset
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="estado" class="form-label">Estado:</label>
+                                    <select name="estado" id="estado" class="form-select" placeholder="Estados">
+                                        @isset($estados)
+                                            @foreach ($estados as $key => $item)
+                                                <option value="{{ $item->id }}"> {{ $item->nombre }} </option>
+                                            @endforeach
+                                        @endisset
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label for="municipio" class="form-label">Municipios:</label>
+                                    <select name="municipio" id="municipio" class="form-select" placeholder="Municipios">
+                                        
                                     </select>
                                 </div>
                             </div>
@@ -218,7 +258,28 @@
 <script src="{{ url('js/general.js') }}"></script>
 
 <script>
-    let id_user = null;
+    const buscar = document.getElementById("search");
+    const form = document.getElementById("showFormCaptura");
+    const elements = document.getElementsByClassName("form-control");
+    const selects = document.getElementsByClassName("form-select");
+    const error_show = document.getElementById("captura_error");
+    const msj_general = document.getElementById("msj_general");
+    const id_row = document.getElementById("id");
+    
+    let ldefault = "";
+
+    const search_municipios = async () => {
+        const param = {
+            tabla: 'municipios', 
+            campos: [{campo:'id'},{campo:'nombre'}], 
+            where: [{campo:'estado', condicional:'=', valor: selects.estado.value}], 
+            order: "municipio"
+        };
+        await load_list('municipio','{!! \asset('lists') !!}', param);
+        selects.municipio.value = ldefault;
+    }
+
+    selects.estado.addEventListener('change', () => search_municipios() );
 
     const clickPress = (event) => {
         if (event.key == "Enter") {
@@ -335,13 +396,14 @@
 
         alert_mensaje("msj_general", "Cargando datos ...", true);
         
-        axios.get('{!! asset('user') !!}' + (buscar.value != "" ? "?search="+buscar.value : "?search=@"), {})
+        axios.get('{!! asset('shops') !!}' + (buscar.value != "" ? "?search="+buscar.value : "?search=@"), {})
             .then(
                 function (result) {
                     const cols = {
-                        col1:['name', 'Nombre'],
-                        col2:['email', 'Email'],
-                        col3:['roles.nombre', 'Rol'],
+                        col1:['logo', 'Logo'],
+                        col2:['nombre', 'Tienda'],
+                        col3:['telefono', 'Teléfono'],
+                        col4:['giro.nombre', 'Giro'],
                         tools:[{
                             col:"*",
                             type:"button",
@@ -373,13 +435,6 @@
     }
     
     const edit_item = (id) => {
-        display_elemento_modal("showForm",2);
-        const form = document.getElementById("showFormCaptura");
-        const elements = form.getElementsByClassName("form-control");
-        const selects = form.getElementsByClassName("form-select");
-        const error_show = document.getElementById("captura_error");
-        const id_row = document.getElementById("id");
-
         error_show.style="display: none;";
 
         for(let i=0; i<elements.length; i++){
@@ -396,19 +451,25 @@
 
         id_row.value="";
 
-        let ruta = '{!! asset('user') !!}/' + id;
+        let ruta = '{!! asset('shops') !!}/' + id;
         let metodo = 'get';
         axios({
             method: metodo,
             url: ruta,
             data: {}
             }).then( function (result) {
-                    elements.name.value = result.data.name;
-                    elements.email.value = result.data.email;
-                    selects.rol.value = result.data.rol;
-                    @php if($contrato) { echo 'selects.contrato.value = (result.data.contrato !== null ? result.data.contrato.contrato : 0);';} @endphp
-                    
                     id_row.value = result.data.id;
+                    for(let i in result.data){
+                        if(typeof selects[i] == "object"){
+                            selects[i].value = result.data[i];
+                        }else{
+                            if (typeof elements[i] == "object") {
+                                elements[i].value = result.data[i];
+                            }
+                        }
+                        console.log(typeof selects[i]);
+                    }
+                    console.log(result.data);
 
                     display_elemento_modal("showForm",3);
                 })
@@ -447,7 +508,7 @@
         
         if(confirm("¿Está seguro de eliminar este registro ?")){
             document.documentElement.setAttribute("data-preloader", "enable");
-            axios.delete('{!! url('user') !!}/' + id, {})
+            axios.delete('{!! url('shops') !!}/' + id, {})
                 .then(
                     function (result) {
                         document.documentElement.setAttribute("data-preloader", "disable");
@@ -464,9 +525,9 @@
 
     const load_page = () => {
         search_table();
-        @if(isset($id_user))
-        id_user = {!! $id_user !!};
-        if(id_user > 0){
+        @if(isset($id_row))
+        id_row = {!! $id_row !!};
+        if(id_row > 0){
             const btn_new = document.getElementById("newRow");
             btn_new.click();
             /*const btn = document.createElement('input');
@@ -476,7 +537,7 @@
             btn.className="btn btn-primary";
             btn.onclick = () => { edit_item(id_user); }
             btn.click();*/
-            edit_item(id_user);
+            edit_item(id_row);
         }
         @endif
     }

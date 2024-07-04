@@ -23,6 +23,7 @@ return new class extends Migration
             $table->boolean('sesion_compartido')->default(false);
             $table->unsignedBigInteger('user')->nullable()->index();
             $table->integer('contrato')->unsigned();
+            $table->integer('giro')->unsigned()->nullable();
             $table->integer('status')->unsigned()->nullable();
             $table->integer('estado')->unsigned()->nullable();
             $table->integer('municipio')->unsigned()->nullable();
@@ -32,6 +33,7 @@ return new class extends Migration
             $table->index('nombre');
             $table->foreign('user')->references('id')->on('users');
             $table->foreign('status')->references('id')->on('catalogos_detalles');
+            $table->foreign('giro')->references('id')->on('giros');
             $table->foreign('contrato')->references('id')->on('contratos');
             $table->foreign('estado')->references('id')->on('estados');
             $table->foreign('municipio')->references('id')->on('municipios');

@@ -398,8 +398,8 @@
                             label:" ",
                             function:"user_item(?)",
                             param:'id',
-                            propiedades:' data-bs-toggle="modal" data-bs-target="#modalForm" ',
-                            class:"btn btn-primary m-1",
+                            propiedades:'',
+                            class:"btn btn-warning m-1",
                             icon:"fa fa-users"
                         },{
                             col:"*",
@@ -407,8 +407,8 @@
                             label:" ",
                             function:"shop_item(?)",
                             param:'id',
-                            propiedades:' data-bs-toggle="modal" data-bs-target="#modalForm" ',
-                            class:"btn btn-primary m-1",
+                            propiedades:'',
+                            class:"btn btn-success m-1",
                             icon:"fa fa-tags"
                         },{
                             col:"*",
@@ -506,6 +506,13 @@
             });
 
         display_elemento_modal("showForm",3);
+    }
+
+    const user_item = (id) => {
+        let a = document.createElement('a');
+        a.target="_self";
+        a.href="{{ asset('p/user') }}?u="+id+"";
+        a.click();
     }
 
     const delete_item = (id) => {

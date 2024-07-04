@@ -13,12 +13,12 @@ class CatalogosSeeder extends Seeder
     public function run(): void
     {
         \DB::table('catalogos')->insert(['id'=>1, 'nombre'=>'Estatus Contrato' ,'css' => '', 'orden' => '1', 'activo' => 1]);
-        \DB::table('catalogos')->insert(['id'=>7, 'nombre'=>'Tipo Contrato' ,'css' => '', 'orden' => '1', 'activo' => 1]);
-        \DB::table('catalogos')->insert(['id'=>2, 'nombre'=>'Tienda' ,'css' => '', 'orden' => '2', 'activo' => 1]);
-        \DB::table('catalogos')->insert(['id'=>3, 'nombre'=>'Lista de Pro y Ser' ,'css' => '', 'orden' => '2', 'activo' => 1]);
-        \DB::table('catalogos')->insert(['id'=>4, 'nombre'=>'Sesiones' ,'css' => '', 'orden' => '2', 'activo' => 1]);
-        \DB::table('catalogos')->insert(['id'=>5, 'nombre'=>'Ventas' ,'css' => '', 'orden' => '2', 'activo' => 1]);
-        \DB::table('catalogos')->insert(['id'=>6, 'nombre'=>'Inventarios' ,'css' => '', 'orden' => '2', 'activo' => 1]);
+        \DB::table('catalogos')->insert(['id'=>7, 'nombre'=>'Tipo Contrato' ,'css' => '', 'orden' => '2', 'activo' => 1]);
+        \DB::table('catalogos')->insert(['id'=>2, 'nombre'=>'Tienda' ,'css' => '', 'orden' => '3', 'activo' => 1]);
+        \DB::table('catalogos')->insert(['id'=>3, 'nombre'=>'Lista de Pro y Ser' ,'css' => '', 'orden' => '4', 'activo' => 1]);
+        \DB::table('catalogos')->insert(['id'=>4, 'nombre'=>'Sesiones' ,'css' => '', 'orden' => '5', 'activo' => 1]);
+        \DB::table('catalogos')->insert(['id'=>5, 'nombre'=>'Ventas' ,'css' => '', 'orden' => '6', 'activo' => 1]);
+        \DB::table('catalogos')->insert(['id'=>6, 'nombre'=>'Inventarios' ,'css' => '', 'orden' => '7', 'activo' => 1]);
         \DB::table('catalogos')->insert(['id'=>9, 'nombre'=>'Status Menu' ,'css' => '', 'orden' => '9', 'activo' => 1]);
 
         \DB::table('catalogos_detalles')->insert(['id'=>1001, 'catalogo_id'=>1, 'opcion' => 'Disponible', 'valor'=>1, 'css' => '', 'orden' => '1', 'activo' => 1]);

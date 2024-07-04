@@ -40,6 +40,7 @@ class MenuSeeder extends Seeder
 
         \DB::table('menu')->insert(['id'=>5001, 'padre'=>5000, 'menu'=>'Contratos', 'ruta'=>'contratos.page', 'status' => 9001]);
         \DB::table('menu')->insert(['id'=>5002, 'padre'=>5000, 'menu'=>'Tickets', 'ruta'=>'ticket.page', 'status' => 9001]);
+        \DB::table('menu')->insert(['id'=>5004, 'padre'=>5000, 'menu'=>'Tiendas', 'ruta'=>'shops.page', 'status' => 9001]);
         \DB::table('menu')->insert(['id'=>5003, 'padre'=>5000, 'menu'=>'Usuarios', 'ruta'=>'users.page', 'status' => 9001]);
 
         \DB::table('menu')->insert(['id'=>9001, 'padre'=>9000, 'menu'=>'Contratos', 'ruta'=>'con.page', 'status' => 9001]);
@@ -66,6 +67,7 @@ class MenuSeeder extends Seeder
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>5001]);
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>5002]);
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>5003]);
+        \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>5004]);
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>9001]);
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>9002]);
         \DB::table('menu_permisos')->insert(['roles'=>1, 'menu'=>9003]);
@@ -86,6 +88,7 @@ class MenuSeeder extends Seeder
         \DB::table('menu_permisos')->insert(['roles'=>2, 'menu'=>4001]);
         \DB::table('menu_permisos')->insert(['roles'=>2, 'menu'=>4002]);
         \DB::table('menu_permisos')->insert(['roles'=>2, 'menu'=>4003]);
+        \DB::table('menu_permisos')->insert(['roles'=>2, 'menu'=>5004]);
         \DB::table('menu_permisos')->insert(['roles'=>2, 'menu'=>9002]);
         \DB::table('menu_permisos')->insert(['roles'=>2, 'menu'=>9003]);
         \DB::table('menu_permisos')->insert(['roles'=>2, 'menu'=>9004]);
@@ -105,6 +108,7 @@ class MenuSeeder extends Seeder
         \DB::table('menu_permisos')->insert(['roles'=>3, 'menu'=>4001]);
         \DB::table('menu_permisos')->insert(['roles'=>3, 'menu'=>4002]);
         \DB::table('menu_permisos')->insert(['roles'=>3, 'menu'=>4003]);
+        \DB::table('menu_permisos')->insert(['roles'=>3, 'menu'=>5004]);
         \DB::table('menu_permisos')->insert(['roles'=>3, 'menu'=>9002]);
         \DB::table('menu_permisos')->insert(['roles'=>3, 'menu'=>9003]);
 

@@ -79,6 +79,10 @@ class ContratosController extends Controller
         $row->status = $request->estatus;
         $row->save();
         
+        $row_ = new UsersContrato;
+        $row_->user = $use->id;
+        $row_->contrato = $row->id;
+
         return $row;
     }
 
@@ -159,7 +163,7 @@ class ContratosController extends Controller
         return $row;
     }
 
-    public function page(){
+    public function page(Request $request){
         if(!acceso('page punteo',5001)){ return redirect()->route('home'); }
         $status = CatalogosDetalles::where("catalogo_id",1)->where("activo",1)->get();
         $tipos = CatalogosDetalles::where("catalogo_id",7)->where("activo",1)->get();

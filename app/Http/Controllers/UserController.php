@@ -97,27 +97,26 @@ class UserController extends Controller
      */
     public function show($id)
     {
+        $row = [];
         if(!acceso('Show usuario',9001)){ return []; }
         $user = \Auth::user();
         $contrato = \Session::get('ncontrato');
         $rows = [];
         if($user->rol==1){
-            $rows = User::select('users.*')
+            $rows = User::with("Contrato")
                     ->where('users.id',$id)
                     ->first();
-            $row_ = UsersContrato::where('user',$id)->first();
-            $rows['contrato'] = $row_;
+            //$row_ = UsersContrato::where('user',$id)->first();
+            //$rows['contrato'] = $row_;
+            $row = $rows;
         }else{
-            $row_ = UsersContrato::where('user',$id)->where('contrato', $contrato)->first();
-            if($row_ instanceof UsersContrato){
-                $rows = User::select('users.*')
-                    ->where('users.id',$id)
-                    ->first();
-                $rows['contrato'] = $row_;
+            $rows = UsersContrato::with("User","User.Contrato")->where('user',$id)->where('contrato', $contrato)->first();
+            if($rows instanceof UsersContrato){
+                $row = $rows->user;
             }
             \Log::Alert("row : ". ($row_->id ?? 'nan'));
         }
-        return $rows;
+        return $row;
     }
 
     /**
@@ -205,7 +204,7 @@ class UserController extends Controller
         }
     }
 
-    public function page(){
+    public function page(Request $request){
         if(!acceso('show Users',9001)){ redirect()->route('home'); }
         $user = \Auth::user();
         $exite = checkcontrato();
@@ -220,6 +219,7 @@ class UserController extends Controller
             'contratos'=> $contratos, 
             'roles' => $roles,
             'contrato' => (!$exite && $user->id == 1),
+            'id_user' => $request->u,
         ];
 
         return view('sistema.search', $param);
