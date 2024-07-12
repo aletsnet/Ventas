@@ -149,24 +149,19 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-12">
+                                <div class="col-4 text-center">
+                                    <label for="logo" class="form-label">Logo:</label>
+                                    <img id="logo-img" src="{!! asset("/image/shop_default.png") !!}" class="img-fluid" alt="" accept="image/jpeg, image/png">
+                                    <input id="logo-file" type="file" class="form-control" name="logo-file" autofocus style="display: none;">
+                                    <input id="logo" type="hidden" class="form-control" name="logo" autofocus style="display: none;">
+                                    <button id="logo-button" type="button" class="btn btn-primary"> <i class="fa fa-image"></i> Subir logo</button>
+                                </div>
+                                <div class="col-8">
                                     <label for="nombre" class="form-label">Nombre:</label>
                                     <input id="nombre" type="text" class="form-control" name="nombre" placeholder="Nombre de la tienda" required autocomplete="name" autofocus>
                                     <input type="hidden" id="id">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
                                     <label for="telefono" class="form-label">Teléfono:</label>
                                     <input id="telefono" type="text" class="form-control" name="telefono" placeholder="Teléfono" required autocomplete="name" autofocus>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-3">
-                                    <label for="logo" class="form-label">Logo:</label>
-                                    <input id="logo" type="file" class="form-control" name="logo" autofocus>
-                                </div>
-                                <div class="col-9">
                                     <label for="direccion" class="form-label">Dirección:</label>
                                     <textarea name="direccion" id="direccion" class="form-control" rows="4"></textarea>
                                 </div>
@@ -181,12 +176,6 @@
                                 <div class="col-12">
                                     <label for="ticket_foot" class="form-label">Pie del ticket:</label>
                                     <textarea name="ticket_foot" id="ticket_foot" class="form-control" rows="4"></textarea>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <label for="ticket_css" class="form-label">Css del ticket:</label>
-                                    <textarea name="ticket_css" id="ticket_css" class="form-control" rows="4"></textarea>
                                 </div>
                             </div>
                             <div class="row">
@@ -252,6 +241,80 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalUsers" tabindex="-2" aria-labelledby="modalmodalUsersLabel" aria-modal="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body showUser" id="showUserError">
+                <div class="card border card-border-danger">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">Usuarios de la tienda</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-danger alert-dismissible alert-label-icon rounded-label fade show" role="alert">
+                            <i class="ri-error-warning-line label-icon"></i><strong>Error</strong> - Se ha producido un error
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body showUser" id="showUserLoading">
+                <div class="card border card-border-warning">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">Usuarios de la tienda</h6>
+                    </div>
+                    <div class="card-body">
+                        <!-- Warning Alert -->
+                        <div class="alert alert-warning alert-dismissible alert-label-icon rounded-label fade show" role="alert">
+                            <i class="ri-alert-line label-icon"></i>
+                            <strong>Espere</strong> se estan cargando los datos 
+                            <div class="spinner-border text-warning text-right" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body showUser" id="showUserCaptura">
+                <div class="card border card-border-success">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">Usuarios de la tienda</h6>
+                    </div>
+                    <div class="card-body">
+                        <form action="javascript:void(0);">
+                            <div class="row">
+                                <div class="col-12" id="captura_error" style="display: none;">
+                                    <div class="alert alert-danger alert-dismissible alert-label-icon rounded-label fade show" role="alert">
+                                        <i class="ri-error-warning-line label-icon"></i><strong>Error</strong> - Se ha producido un error al Guardar
+                                        <span>
+                                            <strong class="error_message"> Error</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <table class="table">
+
+                                </table>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <div class="col-12 text-end">
+                            
+                                <button type="button" class="btn btn-primary" onclick="save_item()"><i class="fa fa-save "></i> Guadar </button>
+                                <button type="button" class="btn btn-danger btnclose" data-bs-dismiss="modal" ><i class="fa fa-times"></i>  Cerrar </button>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('script')
@@ -262,42 +325,53 @@
     const form = document.getElementById("showFormCaptura");
     const elements = document.getElementsByClassName("form-control");
     const selects = document.getElementsByClassName("form-select");
-    const error_show = document.getElementById("captura_error");
+    const captura_error = document.getElementById("captura_error");
     const msj_general = document.getElementById("msj_general");
     const id_row = document.getElementById("id");
+    const logo_button = document.getElementById("logo-button");
+    const logo_img = document.getElementById("logo-img");
+    const logo_file = document.getElementById("logo-file");
     
     let ldefault = "";
 
-    const search_municipios = async () => {
+    const search_municipios = async (valor) => {
         const param = {
             tabla: 'municipios', 
             campos: [{campo:'id'},{campo:'nombre'}], 
             where: [{campo:'estado', condicional:'=', valor: selects.estado.value}], 
-            order: "municipio"
+            order: "municipio",
+            option: valor,
         };
         await load_list('municipio','{!! \asset('lists') !!}', param);
-        selects.municipio.value = ldefault;
+        //selects.municipio.value = valor;
+        //console.log(selects.municipio.value + " - " + ldefault);
+    }
+
+    const file_logo = async () => {
+        const formData = new FormData();
+        formData.append('file', logo_file.files[0]);
+        const r = await axios.post('{!! route('file.logo') !!}', formData, { headers: { 'Content-Type': 'multipart/form-data'} });
+        if(typeof r.data.url == "string"){
+            logo_img.src = "{!! asset('images') !!}/" + r.data.url;
+            elements.logo.value = r.data.url;
+        }
     }
 
     selects.estado.addEventListener('change', () => search_municipios() );
+    logo_button.addEventListener('click', () => elements['logo-file'].click() );
+    logo_img.addEventListener('click', () => elements['logo-file'].click() );
+    elements['logo-file'].addEventListener('change', () => file_logo() );
 
     const clickPress = (event) => {
         if (event.key == "Enter") {
             search_table(1);
         }
     }
-
     
     const new_item = () => {
         //chulada
         display_elemento_modal("showForm",2);
-        const form = document.getElementById("showFormCaptura");
-        const elements = form.getElementsByClassName("form-control");
-        const selects = form.getElementsByClassName("form-select");
-        const error_show = document.getElementById("captura_error");
-        const id_row = document.getElementById("id");
-
-        error_show.style="display: none;";
+        captura_error.style="display: none;";
 
         for(let i=0; i<elements.length; i++){
             const obj = elements.item(i);
@@ -321,11 +395,11 @@
         const form = document.getElementById("showFormCaptura");
         const elements = form.getElementsByClassName("form-control");
         const selects = form.getElementsByClassName("form-select");
-        const error_show = document.getElementById("captura_error");
+        const captura_error = document.getElementById("captura_error");
         const id_row = document.getElementById("id");
         const btnclose = form.getElementsByClassName("btnclose");
 
-        error_show.style="display: none;";
+        captura_error.style="display: none;";
 
         for(let i=0; i<elements.length; i++){
             const obj = elements.item(i);
@@ -338,17 +412,24 @@
         }
 
         param = {
-            name : elements.name.value,
-            email : elements.email.value,
-            password : elements.password.value,
-            password_confirmation: elements.password_confirm.value,
-            rol: selects.rol.value,
+            nombre : elements.nombre.value,
+            telefono : elements.telefono.value,
+            logo : elements.logo.value,
+            direccion : elements.direccion.value,
+            ticket_head : elements.ticket_head.value,
+            ticket_foot : elements.ticket_foot.value,
+            ticket_css : elements.ticket_css.value,
+            sesion_compartido : 1,
+            contrato : selects.contrato.value,
+            giro : selects.giro.value,
+            estado : selects.estado.value,
+            municipio : selects.municipio.value,
             @php if($contrato) { echo 'contrato: selects.contrato.value,';} @endphp
             
             id : id_row.value,
         };
 
-        let ruta = id_row.value != "" ? '{!! asset('user') !!}/' + id_row.value : '{!! route('user.store') !!}';
+        let ruta = id_row.value != "" ? '{!! asset('shops') !!}/' + id_row.value : '{!! route('shops.store') !!}';
         let metodo = id_row.value != "" ? 'put' : 'post';
         axios({
             method: metodo,
@@ -361,8 +442,8 @@
                     btnclose[0].click();
                 })
             .catch(function (error) {
-                error_show.style="display: normal;";
-                const message = error_show.getElementsByClassName("error_message");
+                captura_error.style="display: normal;";
+                const message = captura_error.getElementsByClassName("error_message");
                 
                 if(typeof error.response == 'undefined'){
                     console.log(error);
@@ -400,14 +481,15 @@
             .then(
                 function (result) {
                     const cols = {
-                        col1:['logo', 'Logo'],
+                        col0:['contrato.nombre', 'Contratos'],
+                        col1:['estado.nombre,municipio.nombre', 'Lugar'],
                         col2:['nombre', 'Tienda'],
                         col3:['telefono', 'Teléfono'],
                         col4:['giro.nombre', 'Giro'],
                         tools:[{
                             col:"*",
                             type:"button",
-                            label:"Editar",
+                            label:"",
                             function:"edit_item(?)",
                             param:'id',
                             propiedades:' data-bs-toggle="modal" data-bs-target="#modalForm" ',
@@ -416,7 +498,16 @@
                         },{
                             col:"*",
                             type:"button",
-                            label:"Eliminar",
+                            label:"",
+                            function:"users_item(?)",
+                            param:'id',
+                            propiedades:' data-bs-toggle="modal" data-bs-target="#modalUsers" ',
+                            class:"btn btn-info m-1",
+                            icon:"fa fa-users"
+                        },{
+                            col:"*",
+                            type:"button",
+                            label:"",
                             function:"delete_item(?)",
                             param:'id',
                             propiedades:'',
@@ -435,7 +526,7 @@
     }
     
     const edit_item = (id) => {
-        error_show.style="display: none;";
+        captura_error.style="display: none;";
 
         for(let i=0; i<elements.length; i++){
             const obj = elements.item(i);
@@ -459,6 +550,7 @@
             data: {}
             }).then( function (result) {
                     id_row.value = result.data.id;
+                    logo_img.src = "{!! asset('images') !!}/" + result.data.logo;
                     for(let i in result.data){
                         if(typeof selects[i] == "object"){
                             selects[i].value = result.data[i];
@@ -467,15 +559,16 @@
                                 elements[i].value = result.data[i];
                             }
                         }
-                        console.log(typeof selects[i]);
+                        
                     }
-                    console.log(result.data);
-
+                    ldefault = result.data.municipio;
+                    search_municipios(ldefault);
+                    selects.municipio.value = result.data.municipio;
                     display_elemento_modal("showForm",3);
                 })
             .catch(function (error) {
-                error_show.style="display: normal;";
-                const message = error_show.getElementsByClassName("error_message");
+                captura_error.style="display: normal;";
+                const message = captura_error.getElementsByClassName("error_message");
                 
                 if(typeof error.response == 'undefined'){
                     console.log(error);
@@ -502,6 +595,20 @@
             });
 
         display_elemento_modal("showForm",3);
+    }
+
+    const users_item = async (valor) => {
+        /*const param = {
+            tabla: 'userd', 
+            campos: [{campo:'id'},{campo:'email'}], 
+            where: [{campo:'contrato', condicional:'=', valor: selects.estado.value}], 
+            order: "municipio",
+            option: valor,
+        };*/
+        //await load_list('municipio','{!! \asset('lists') !!}', param);
+        //selects.municipio.value = valor;
+        //console.log(selects.municipio.value + " - " + ldefault);
+        display_elemento_modal("showUser",3);
     }
 
     const delete_item = (id) => {

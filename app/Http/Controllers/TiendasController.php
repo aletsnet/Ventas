@@ -25,7 +25,7 @@ class TiendasController extends Controller
         $search = $request->search == '@' ? '' : $request->search;
 
         if($user->rol==1){
-            $rows = Tiendas::with("Giro")->where(function($query) use($search){
+            $rows = Tiendas::with("Giro", "Contrato", "Estado","Municipio")->where(function($query) use($search){
             if($search != ""){
                     $query->where('nombre','like','%'.$search.'%');
                     $query->OrWhere('telefono','like','%'.$search.'%');

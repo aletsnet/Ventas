@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth'], function()
     
 
     Route::post('/lists', [App\Http\Controllers\GeneralController::class, 'lists'])->name('lists');
+    Route::post('/upfile/logos', [App\Http\Controllers\GeneralController::class, 'logos'])->name('file.logo');
     
     Route::resource('shops', 'App\Http\Controllers\TiendasController');
     Route::resource('contratos', 'App\Http\Controllers\ContratosController');

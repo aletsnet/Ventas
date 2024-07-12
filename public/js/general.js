@@ -397,6 +397,8 @@ const load_list = (destino, controll, parametros) => {
     const first = document.createElement('option');
     first.innerHTML = " Cargando ...";
     select.appendChild(first);
+
+    console.log(parametros);
     
     axios.post(controll, parametros)
         .then(
@@ -411,6 +413,7 @@ const load_list = (destino, controll, parametros) => {
                     select.appendChild(option);
                 });
 
+                select.value = parametros.option;
                 if(typeof select.attributes.onchange == 'object'){
                     eval(select.attributes.onchange.nodeValue);
                 }

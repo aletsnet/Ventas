@@ -11,6 +11,11 @@ class Tiendas extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public function Contrato()
+    {
+        return $this->belongsTo('App\Models\Contratos', 'contrato');
+    }
+
     public function User()
     {
         return $this->belongsTo('App\Models\User', 'user');
