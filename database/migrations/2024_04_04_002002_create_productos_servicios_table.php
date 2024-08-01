@@ -33,7 +33,7 @@ return new class extends Migration
             $table->index('codigo');
             $table->index('sku');
             $table->index('nombre');
-            $table->index('descripcion');
+            //$table->index('descripcion')->length(255);;
             
             $table->foreign('user')->references('id')->on('users');
             $table->foreign('contrato')->references('id')->on('contratos');

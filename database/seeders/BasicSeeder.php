@@ -13,7 +13,7 @@ class BasicSeeder extends Seeder
     public function run(): void
     {
         
-        \DB::table('users')->insert(['id'=> 2,'avatar'=>'vendor/adminlte/dist/img/avatar.png', 'name'=>'usuario demo','email'=>'aletsnet@hotmail.com','password'=> \Hash::make('qwaszx12'),'rol' => 1]);
+        \DB::table('users')->insert(['id'=> 2,'avatar'=>'default/avatar.png', 'name'=>'usuario demo','email'=>'aletsnet@hotmail.com','password'=> \Hash::make('qwaszx12'),'rol' => 2]);
         \DB::table('contratos')->insert(['id'=>1, 'nombre'=>'demo', 'telefono'=> '-','user'=>2, 'status' => 1001, 'tipo' => 7001,'estado'=>13]);
         \DB::table('tiendas')->insert(['id'=>1, 'nombre'=>'Teinda demo', 'contrato'=>1]);
         \DB::table('users_contratos')->insert(['user'=>2, 'contrato' => 1]);

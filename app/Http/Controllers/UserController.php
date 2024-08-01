@@ -19,15 +19,30 @@ class UserController extends Controller
         $user = \Auth::user();
         $contrato = \Session::get('ncontrato');
         $search = $request->search == '@' ? '' : $request->search;
+        $c = $request->c ?? "";
+        $rows = [];
 
         if($user->rol==1){
-            $rows = User::with('roles')->where(function($query) use($search){
-            if($search != ""){
-                    $query->where('email','like','%'.$search.'%');
-                    $query->OrWhere('name','like','%'.$search.'%');
-                }
-            })
-            ->paginate(10);
+            if($c != ""){
+                $rows = User::with('roles')->select('users.*')
+                    ->join('users_contratos','users_contratos.user','=','users.id')
+                    ->where('users_contratos.contrato','=',$c)
+                    ->where(function($query) use($search){
+                    if($search != ""){
+                            $query->where('email','like','%'.$search.'%');
+                            $query->OrWhere('name','like','%'.$search.'%');
+                        }
+                    })
+                    ->paginate(10);
+            }else{
+                $rows = User::with('roles')->where(function($query) use($search){
+                    if($search != ""){
+                            $query->where('email','like','%'.$search.'%');
+                            $query->OrWhere('name','like','%'.$search.'%');
+                        }
+                    })
+                    ->paginate(10);    
+            }
         }else{
             $rows = User::with('roles')->select('users.*')
                 ->join('users_contratos','users_contratos.user','=','users.id')
@@ -76,7 +91,7 @@ class UserController extends Controller
         }
 
         $row = new User;
-        $row->avatar = 'vendor/adminlte/dist/img/avatar.png';
+        $row->avatar = 'default/avatar.png';
         $row->name = $request->name;
         $row->email = $request->email;
         $row->password = \Hash::make($request->password);
@@ -208,18 +223,20 @@ class UserController extends Controller
         if(!acceso('show Users',9001)){ redirect()->route('home'); }
         $user = \Auth::user();
         $exite = checkcontrato();
+        $contratos = Contratos::get();
         
         $roles = Roles::where('activo',1)->get();
         if($user->id > 1){
             $roles = Roles::where('activo',1)->where('id','>',1)->get();
+            $contratos = $request->c;
         }
 
-        $contratos = Contratos::get();
         $param = [
             'contratos'=> $contratos, 
             'roles' => $roles,
             'contrato' => (!$exite && $user->id == 1),
             'id_user' => $request->u,
+            'contratos' => $contratos,
         ];
 
         return view('sistema.search', $param);

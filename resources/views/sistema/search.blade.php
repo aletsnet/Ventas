@@ -252,6 +252,8 @@
 
         id_row.value="";
 
+        @php if($contrato) { echo 'selects.contrato.value = ' . $contrato . ';';} @endphp
+
         display_elemento_modal("showForm",3);
     }
 
@@ -334,8 +336,10 @@
         const buscar = document.getElementById("search");
 
         alert_mensaje("msj_general", "Cargando datos ...", true);
+        let url = '{!! asset('user') !!}' + (buscar.value != "" ? "?search="+buscar.value : "?search=@");
+        @php if($contrato) { echo 'url += "&c=' . $contrato . '";';} @endphp
         
-        axios.get('{!! asset('user') !!}' + (buscar.value != "" ? "?search="+buscar.value : "?search=@"), {})
+        axios.get(url, {})
             .then(
                 function (result) {
                     const cols = {

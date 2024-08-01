@@ -6,6 +6,7 @@ use App\Models\Tiendas;
 use App\Models\Contratos;
 use App\Models\Estados;
 use App\Models\UsersContrato;
+use App\Models\UsersTiendas;
 use App\Models\User;
 use App\Models\Roles;
 use App\Models\Giros;
@@ -93,6 +94,11 @@ class TiendasController extends Controller
         $row->estado = $request->estado;
         $row->municipio = $request->municipio;
         $row->save();
+
+        $usertienda = new UsersTiendas;
+        $usertienda->tienda = $row->id;
+        $usertienda->user = $user->id;
+        $usertienda->save();
 
         return $row;
     }
@@ -220,5 +226,81 @@ class TiendasController extends Controller
         ];
 
         return view('shop.search', $param);
+    }
+
+    public function list_users($id)
+    {
+        if(!acceso('show users tienda',5004)){ return []; }
+
+        $result = [];
+        $user = \Auth::user();
+        $contrato = \Session::get('ncontrato');
+
+        if($user->rol==1){
+            $row = Tiendas::with("Contrato")->where("id",$id)->first();
+            $rows = [];
+            $users = [];
+            if($row instanceof Tiendas){
+                $rows = UsersTiendas::with("Tienda", "User")->where("tienda", $id)->get();
+                $users = UsersContrato::with("User")->where("contrato", $row->contrato)->get();
+            }
+
+            $result = (object) [
+                "tienda" => $row,
+                "tienda_users" => $rows,
+                "users_contrato" => $users
+            ];
+            
+        }else{
+            $row = Tiendas::with("Contrato")->where("id",$id)->where("contrato",$contrato)->first();
+            $rows = [];
+            $users = [];
+            if($row instanceof Tiendas){
+                $rows = UsersTiendas::with("Tienda", "User")->where("tienda", $id)->get();
+                $users = UsersContrato::with("User")->where("contrato", $row->contrato)->get();
+            }
+
+            $result = (object) [
+                "tienda" => $row,
+                "tienda_users" => $rows,
+                "users_contrato" => $users
+            ];
+        }
+
+        return $result;
+    }
+
+    public function update_users(Request $request, $id)
+    {
+        if(!acceso('update users tienda',5004)){ return []; }
+
+        $result = [];
+        $user = \Auth::user();
+        $contrato = \Session::get('ncontrato');
+        $list_actual = UsersTiendas::Where("tienda",$id)->get();
+        $actual = [];
+        foreach($list_actual as $item){
+            $actual[$item->user] = false;
+        }
+
+        foreach($request->list as $item){
+            if(is_array($item)){
+                $id_user = $item["user"]["id"];
+                if(!key_exists($id_user, $actual) ){
+                    $user = new UsersTiendas;
+                    $user->tienda = $id;
+                    $user->user = $id_user;
+                    $user->save();
+                }
+                $actual[$id_user] = true;
+            }
+        }
+
+        foreach($actual as $key => $item){
+            if(!$actual[$key]){
+                $user = UsersTiendas::where("tienda",$id)->where("user",$key)->delete();
+            }
+        }
+        return $result;
     }
 }

@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \DB::table('users')->insert(['avatar'=>'vendor/adminlte/dist/img/avatar.png',
+        \DB::table('users')->insert(['avatar'=>'default/avatar.png',
                                      'name'=>'Administrador',
                                      'email'=>'admin@web.com',
                                      'password'=> \Hash::make('qwaszx12'),

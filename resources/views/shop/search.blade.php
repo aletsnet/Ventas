@@ -297,17 +297,45 @@
                             </div>
                             <div class="row">
                                 <table class="table">
-
+                                    <thead class="table-light" >
+                                        <tr>
+                                            <th scope="col-1">
+                                                Foto
+                                            </th>
+                                            <th scope="col-4">
+                                                email
+                                            </th>
+                                            <th scope="col">
+                                                Usuario
+                                            </th>
+                                            <th scope="col-3">
+                                                
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="list_user">
+                                        <tr>
+                                            <td colspan="3">
+                                                No hay elementos a mostrar
+                                            </td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </form>
                     </div>
                     <div class="card-footer">
-                        <div class="col-12 text-end">
-                            
-                                <button type="button" class="btn btn-primary" onclick="save_item()"><i class="fa fa-save "></i> Guadar </button>
+                        <div class="row">
+                            <div class="col-6 text-end">
+                                <input type="hidden" id="tienda_id">
+                                <button type="button" class="btn btn-success" onclick="user_new()" data-bs-dismiss="modal"><i class="fa fa-user "></i> Nuevo Usuario </button>
+                            </div>
+                            <div class="col-6 text-end">
+                                
+                                <button type="button" class="btn btn-primary" onclick="user_save()"><i class="fa fa-save "></i> Guadar </button>
                                 <button type="button" class="btn btn-danger btnclose" data-bs-dismiss="modal" ><i class="fa fa-times"></i>  Cerrar </button>
-                            
+                                
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -331,7 +359,10 @@
     const logo_button = document.getElementById("logo-button");
     const logo_img = document.getElementById("logo-img");
     const logo_file = document.getElementById("logo-file");
-    
+
+    let contrato_users = [];
+    let tienda_users = [];
+    let tienda_users_delete = [];
     let ldefault = "";
 
     const search_municipios = async (valor) => {
@@ -453,7 +484,6 @@
                     let tmp_message = "";
                     display_elemento_modal("showForm",3);
                     for(let i in err) {
-                        console.log(i);
                         if(typeof elements[i] != "undefined" ){
                             elements[i].className = "form-control is-invalid";
                             tmp_message += '<li>' + err[i] + '</li>'
@@ -472,7 +502,6 @@
     }
 
     const search_table = (page) => {
-        document.documentElement.setAttribute("data-preloader", "enable");
         const buscar = document.getElementById("search");
 
         alert_mensaje("msj_general", "Cargando datos ...", true);
@@ -578,7 +607,6 @@
                     let tmp_message = "";
                     display_elemento_modal("showForm",3);
                     for(let i in err) {
-                        console.log(i);
                         if(typeof elements[i] != "undefined" ){
                             elements[i].className = "form-control is-invalid";
                             tmp_message += '<li>' + err[i] + '</li>'
@@ -597,24 +625,100 @@
         display_elemento_modal("showForm",3);
     }
 
+    const check_user = (u) => {
+        const index = tienda_users.findIndex(item => item.user.id == u);
+        const row_user = contrato_users.filter(item => item.user.id == u);
+        if(index >= 0){
+            delete tienda_users[index];
+        }else{
+            
+            tienda_users.push(...row_user);
+        }
+    }
+
     const users_item = async (valor) => {
-        /*const param = {
-            tabla: 'userd', 
-            campos: [{campo:'id'},{campo:'email'}], 
-            where: [{campo:'contrato', condicional:'=', valor: selects.estado.value}], 
-            order: "municipio",
-            option: valor,
-        };*/
-        //await load_list('municipio','{!! \asset('lists') !!}', param);
-        //selects.municipio.value = valor;
-        //console.log(selects.municipio.value + " - " + ldefault);
+        const table = document.getElementById("showUserCaptura");
+        const list_users = document.getElementById("list_user");
+        const tienda_id = document.getElementById("tienda_id");
+        display_elemento_modal("showUser",2);
+        const r = await axios.get('{!! asset('shops/user') !!}' + "/" + valor);
+        const list = r.data.users_contrato;
+        contrato_users = list;
+        tienda_users = r.data.tienda_users;
+        list_users.innerHTML = "";
+
+        tienda_id.value = r.data.tienda.id;
+        list.map( item => {
+            const row_user = tienda_users.filter(user => user.user.id == item.user.id);
+            const tr = document.createElement("tr");
+            const td = document.createElement("td");
+            const img = document.createElement("img");
+            img.src = "{!! asset('images') !!}/" + item.user.avatar;
+            img.width = "32";
+            td.appendChild(img);
+            tr.appendChild(td);
+
+            const td0 = document.createElement("td");
+            td0.innerHTML = item.user.email;
+            tr.appendChild(td0);
+
+            const td1 = document.createElement("td");
+            td1.innerHTML = item.user.name;
+            tr.appendChild(td1);
+
+            const td2 = document.createElement("td");
+            const label = document.createElement("label");
+            const check = document.createElement("input");
+            const texto = document.createElement("i");
+            check.type = "checkbox";
+            check.checked = typeof row_user[0] === "object"
+            check.onchange = () => { check_user(item.user.id); }
+            texto.innerHTML = " Acceso";
+            label.appendChild(check);
+            label.appendChild(texto);
+            td2.appendChild(label);
+            tr.appendChild(td2);
+
+            list_users.appendChild(tr);
+        });
+        
         display_elemento_modal("showUser",3);
+        
+    }
+
+    const user_save = () => {
+        const table = document.getElementById("showUserCaptura");
+        const list_users = document.getElementById("list_user");
+        const tienda_id = document.getElementById("tienda_id");
+        const btnclose = document.getElementsByClassName("btnclose");
+        axios.post('{!! url('shops') !!}/users/' + tienda_id.value, { list : tienda_users })
+                .then(
+                    function (result) {
+                        display_elemento_modal("showUser",2);
+                        search_table();
+                        btnclose[1].click();
+                    }
+                )
+                .catch(function (error) {
+                    console.log(error);
+                    display_elemento_modal("showUser",3);
+                    search_table();
+                });
+        
+    }
+
+    const user_new = () => {
+        const a = document.createElement('a');
+        const venta_id = document.getElementById("venta_id");
+        a.target="_blank";
+        a.href="{{ asset('p/user') }}?c="+venta_id.value+"";
+        a.click();
     }
 
     const delete_item = (id) => {
         
         if(confirm("¿Está seguro de eliminar este registro ?")){
-            document.documentElement.setAttribute("data-preloader", "enable");
+            //document.documentElement.setAttribute("data-preloader", "enable");
             axios.delete('{!! url('shops') !!}/' + id, {})
                 .then(
                     function (result) {

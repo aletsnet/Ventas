@@ -57,7 +57,7 @@
     </ul>
 
     <ul class="navbar-nav ml-auto">
-
+    @guest
         @if (Route::has('login'))
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('login') }}">
@@ -74,6 +74,7 @@
                 </a>
             </li>
         @endif
+    @endguest
     </ul>
     <form id="logout-form" action="{{ route('logout') }}" method="POST">
         @csrf

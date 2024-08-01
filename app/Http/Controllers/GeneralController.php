@@ -15,7 +15,7 @@ class GeneralController extends Controller
         $order = $request->order;
 
         if($tabla){
-            switch($table){
+            switch($tabla){
                 case "municipios":
                     $lists = \DB::table($tabla);
                     $elementos = [];
@@ -55,7 +55,7 @@ class GeneralController extends Controller
         $data = [];
 
         $request->validate([
-            'file' => 'required|mimes:gif,png,jpg|max:41943040',
+            'file' => 'required|mimes:gif,png,jpg|max:141943040',
         ]);
 
         $pathSave = sha1(rand(1000,9999) . date('ymd His'));

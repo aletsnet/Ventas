@@ -28,6 +28,8 @@ Route::group(['middleware' => 'auth'], function()
     
 
     Route::post('/lists', [App\Http\Controllers\GeneralController::class, 'lists'])->name('lists');
+    Route::get('/shops/user/{tienda}', [App\Http\Controllers\TiendasController::class, 'list_users'])->name('shops.users');
+    Route::post('/shops/users/{tienda}', [App\Http\Controllers\TiendasController::class, 'update_users'])->name('shops.update.users');
     Route::post('/upfile/logos', [App\Http\Controllers\GeneralController::class, 'logos'])->name('file.logo');
     
     Route::resource('shops', 'App\Http\Controllers\TiendasController');
