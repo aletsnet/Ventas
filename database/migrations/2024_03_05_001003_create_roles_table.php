@@ -31,7 +31,7 @@ return new class extends Migration
         
         //alter table
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('rol')->unsigned()->after('password');
+            $table->integer('rol')->unsigned()->nullable()->after('password');
             $table->unsignedBigInteger('user')->nullable()->index()->after('password');
             
             $table->foreign('rol')->references('id')->on('roles');

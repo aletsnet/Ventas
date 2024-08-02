@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -51,7 +52,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
     }
 
@@ -63,10 +64,44 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        \Log::info("registrando");
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'rol' => 2,
             'password' => Hash::make($data['password']),
+            
         ]);
+    }
+
+    public function register(Request $request){
+        \Log::info("Nuevo registro");
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'password' => 'confirmed',
+        ]);
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'rol' => 2,
+            'password' => $request->password,
+        ];
+        
+        $this->create($data);
+
+        $userdata = [
+            'email' => $request->email,
+            'password' => $request->password,
+        ];
+
+        if(\Auth::attempt($userdata)){
+            \Log::info("ok");
+            return redirect()->route("home");
+        }else{
+            \Log::info("algo salio mal");
+            return redirect()->route("registro");
+        }
     }
 }
