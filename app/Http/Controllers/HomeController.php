@@ -23,6 +23,10 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $user = \Auth::user();
+        $exite = checkcontrato();
+        $contrato = \Session::get('ncontrato');
+        dump($user->email_verified_at);
         return view('home');
     }
 }

@@ -53,6 +53,7 @@
             
         </li>    
         @endforeach
+        
         @endguest
     </ul>
 
@@ -74,6 +75,12 @@
                 </a>
             </li>
         @endif
+    @else
+        <li class="nav-item">
+            <a class="dropdown-item" href="javascript:out();" >
+                <i class="fa fa-power-off"></i> <span >Salir</span>
+            </a>
+        </li>
     @endguest
     </ul>
     <form id="logout-form" action="{{ route('logout') }}" method="POST">

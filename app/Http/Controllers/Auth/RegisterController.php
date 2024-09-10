@@ -65,20 +65,24 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         \Log::info("registrando");
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'rol' => 2,
             'password' => Hash::make($data['password']),
             
         ]);
+
+        $user->sendEmailVerificationNotification();
+
+        return $user;
     }
 
     public function register(Request $request){
         \Log::info("Nuevo registro");
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
             'password' => 'confirmed',
         ]);
 
@@ -90,6 +94,7 @@ class RegisterController extends Controller
         ];
         
         $this->create($data);
+
 
         $userdata = [
             'email' => $request->email,
