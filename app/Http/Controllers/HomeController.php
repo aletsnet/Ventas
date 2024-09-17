@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class HomeController extends Controller
 {
@@ -23,10 +24,17 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $user = \Auth::user();
+        $page = "home";
+        $user_sesion = \Auth::user();
+        $user = User::with("roles","contrato")->where("id",$user_sesion->id)->first();
         $exite = checkcontrato();
         $contrato = \Session::get('ncontrato');
-        dump($user->email_verified_at);
-        return view('home');
+        if($user->email_verified_at == null){
+            $page = "post.validaremail";
+        }
+        $param = [ 
+            'row' => $user
+        ];
+        return view($page, $param);
     }
 }

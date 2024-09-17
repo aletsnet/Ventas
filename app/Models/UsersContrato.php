@@ -11,7 +11,7 @@ class UsersContrato extends Model
 
     public function Contrato()
     {
-        return $this->belongsTo('App\Models\contratos', 'contrato');
+        return $this->belongsTo('App\Models\Contratos', 'contrato');
     }
 
     public function User()

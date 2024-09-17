@@ -12,11 +12,11 @@
     function checkcontrato(){
         $contrato = false;
         $user = \Auth::user();
-        $row = App\Models\UsersContrato::with('contrato','contrato.municipios')->where('user',$user->id)->first();
+        $row = App\Models\UsersContrato::with('contrato','contrato.municipio')->where('user',$user->id)->first();
         $contrato = $row instanceof App\Models\UsersContrato;
         $ncontrato = $contrato ? $row->contrato : 0;
         Session::put('ncontrato', $ncontrato);
-        Session::put('mcontrato', $row->Contrato->Municipios->municipio ?? 0);
+        Session::put('mcontrato', $row->Contrato->Municipio->municipio ?? 0);
         Session::put('econtrato', $row->Contrato->estado ?? 0);
         return $contrato;
     }
